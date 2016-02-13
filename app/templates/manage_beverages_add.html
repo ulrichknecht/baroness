@@ -1,0 +1,18 @@
+{% extends "base.html"%}
+{% set title = "Produkt hinzufügen" %}
+{% block content %}
+	<h1> Produkt hinzufügen</h1>
+	{% if error %}
+		<p>Fehler: {{ error }}</p>
+	{% endif %}
+	{% if success %}
+		<p>{{ success }}</p>
+	{% endif %}
+	<p> TODO: many </p>
+	<form name="user" method="post" action="/manage_beverages/add">
+		Produktname:<input type="text" name="name" required><br>
+		Preis:<input type="number" name="price" step="any" required value="0.0" /> € <br>
+		Angezeigt: <input type="checkbox" name="isshown" checked /><br>
+		<input type="submit" value="Hinzufügen">
+	</form>
+{% endblock %}

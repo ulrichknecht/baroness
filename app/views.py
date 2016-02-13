@@ -136,6 +136,65 @@ def manage_beverages():
     products = get_products()
     return render_template('manage_beverages.html', products=products, user=get_user_by_name(session.get('name')))
 
+
+@app.route('/manage_beverages/edit', methods=['POST'])
+@app.route('/manage_beverages/edit/<name>', methods=['GET'])
+@requires_baron
+def manage_beverages_edit(name=None):
+    if request.method == 'GET':
+        error = None
+        p = get_product_by_name(name);
+
+        if p is None:
+            error = "Product existiert nicht"
+
+        return render_template('manage_beverages_edit.html', product_to_edit=p, error=error, user=get_user_by_name(session.get('name')))
+
+    if request.method == 'POST':
+        p = Product()
+        #print request.form
+        p.id = request.form['id']
+        p.name = request.form['name']
+        p.price = float(request.form['price'])
+
+        if 'isshown' in request.form:
+            p.isshown = True
+        else:
+            p.isshown = False
+
+        update_product(p)
+
+        # update_user(u)
+
+        return redirect('/manage_beverages')
+
+
+@app.route('/manage_beverages/add', methods=['POST', 'GET'])
+@requires_baron
+def manage_beverages_add():
+    if request.method == 'POST':
+        p = Product()
+        error = None
+        print request
+        p.name = request.form['name']
+        #if request.form['price'].isnumeric():
+        p.price = float(request.form['price'])
+        #else:
+        #    error = "Preis muss eine Nummer sein."
+
+        if 'isshown' in request.form:
+            p.isshown = True
+        else:
+            p.isshown = False
+
+        if error is None:
+            add_product(p)
+            return render_template('manage_beverages_add.html', success="Konsumat hinzugefuegt.", user=get_user_by_name(session.get('name')))
+
+        return render_template('manage_beverages_add.html', error=error, user=get_user_by_name(session.get('name')))
+    return render_template('manage_beverages_add.html', user=get_user_by_name(session.get('name')))
+
+
 @app.route('/consume')
 @requires_login
 def consume():

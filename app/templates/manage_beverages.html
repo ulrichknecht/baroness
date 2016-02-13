@@ -7,8 +7,24 @@
 	</ul>
 	<h1> Konsumatverwaltung </h1>
 
-	{% for product in products %}
-		<div><p> {{ product.id }}, {{product.name}}, {{product.price}} €</p></div>
-	{% endfor %}
-	<a href=/manage_beverages/add>Getränk Hinzufügen</a></li>
+    <table>
+  		<tr>
+    		<th>ID</th>
+    		<th>Name</th>
+    		<th>Preis</th>
+			<th>Wird angezeigt</th>
+            <th></th>
+  		</tr>
+		{% for product in products %}
+		<tr>
+			<td>{{product.id}}</td>
+			<td>{{product.name}}</td>
+			<td>{{product.price}}</td>
+            <td>{% if product.isshown %} &#9745; {% else %} &#9744; {% endif %} </td>
+			<td> <a href="/manage_beverages/edit/{{product.name}}">bearbeiten</a></td>
+		</tr>
+		{% endfor %}
+    </table>
+    <br />
+    <a href=/manage_beverages/add>Getränk Hinzufügen</a></li>
 {% endblock %}

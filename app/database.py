@@ -111,18 +111,40 @@ def get_products():
         p.id = row[0]
         p.name = row[1]
         p.price = row[2]
+        p.isshown = row[3]
         products.append(p)
     return products
 
 
 def get_product_by_id(id):
-    row = query_db("SELECT * FROM PRODUCTS WHERE ID = ?", str(id), one=True)
-    print row
+    row = query_db("SELECT * FROM PRODUCTS WHERE ID = ?", [str(id)], one=True)
+#    print row
     p = Product()
     p.id = row[0]
     p.name = row[1]
     p.price = row[2]
+    p.isshown = row[3]
     return p
+
+
+def get_product_by_name(name):
+    row = query_db("SELECT * FROM PRODUCTS WHERE NAME = ?", [str(name)], one=True)
+    p = Product()
+    p.id = row[0]
+    p.name = row[1]
+    p.price = row[2]
+    p.isshown = row[3]
+    return p
+
+
+def update_product(p):
+    query_db("UPDATE products SET NAME=?, PRICE=?, ISSHOWN=? WHERE ID=?", (p.name, p.price, p.isshown, p.id))
+    get_db().commit()
+
+
+def add_product(p):
+    query_db("Insert INTO PRODUCTS (NAME, PRICE, ISSHOWN) VALUES (?, ?, ?)", (p.name, p.price, p.isshown))
+    get_db().commit()
 
 
 def get_consumed(user=None, startdate=None, enddate=None):

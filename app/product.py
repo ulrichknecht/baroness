@@ -4,3 +4,4 @@ class Product:
         self.id = 0
         self.name = ""
         self.price = 0.0
+        self.isshown = False
