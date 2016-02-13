@@ -1,0 +1,27 @@
+{% extends "base.html"%}
+{% set title = "Bierliste" %}
+{% block content %}
+	<h3>TODO: </h3>
+	<ul>
+		<li> graphical beer list</li>
+	</ul>
+	<h1> Bierliste </h1>
+	<table>
+  		<tr>
+    		<th>ID</th>
+    		<th>Produkt Nummer</th>
+    		<th>Konsument</th>
+			<th>Preis</th>
+			<th>Zeit</th>
+  		</tr>
+		{% for consumption in consumed %}
+		<tr>
+			<td>{{consumption.id}}</td>
+			<td>{{consumption.prodnr}}</td>
+			<td>{{consumption.consumer}}</td>
+			<td>{{consumption.price}}</td>
+			<td>{{consumption.time}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

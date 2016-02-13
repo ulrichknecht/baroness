@@ -1,0 +1,79 @@
+# The database is a sqlite3 database
+
+# displaying the column names for querries works with
+.headers on
+
+# table info can be shown with
+
+PPRAGMA table_info(table_name);
+
+
+
+# the used database can be created with
+
+$ sqlite3 database.db
+
+
+# The table USERS contains user information, user information is what we want to know about the user, and his privileges
+
+CREATE TABLE USERS(
+	ID INTEGER PRIMARY KEY,
+	NAME TEXT NOT NULL,
+	PASSWORD TEXT NOT NULL,
+	LONGNAME TEXT NOT NULL,
+	EMAIL TEXT,
+	RFID_ID TEXT,
+	ISBLACK BOOLEAN DEFAULT 0,
+	ISBARON BOOLEAN DEFAULT 0,
+	ISSHOWN BOOLEAN DEFAULT 1
+);
+
+# The table PRODUCTS contains information about the beverages available
+CREATE TABLE PRODUCTS(
+	ID INTEGER PRIMARY KEY,
+	NAME TEXT NOT NULL,
+	PRICE REAK NOT NULL
+);
+
+# The table CONSUMED contains all products that have been consumed, who it consumend, when it was consumed,  and also if they have been payed allready, this is important because we do not want to have redunant data.
+# Maybe we add a column "dept" to users, then we have to remove the column ISPAYD ffrom this tabla
+
+CREATE TABLE CONSUMED(
+	ID INTEGER PRIMARY KEY,
+	PRODNR INTEGER NOT NULL,
+	CONSUMER INTEGER NOT NULL,
+	PRICE REAL DEFAULT 0.0,
+	TIME DATETIME
+);
+
+# The table CONFIG stores basic config data, this is for the admins and the barons
+
+
+
+###
+# Test data can be generated with
+# ID|NAME|PASSWORD|LONGNAME|EMAIL|RFID_ID|ISBLACK|ISBARON|ISADMIN
+INSERT INTO USERS VALUES (1, 'petra', 'test', 'Petra Besser', 'petra@bess.er', '0x0123456789', 0, 0, 1)
+INSERT INTO USERS VALUES (2, 'peter', 'test', 'Peter Schlechter', 'peter@schlecht.er', '0x0987654321', 0, 0, 1);
+INSERT INTO USERS VALUES (3, 'hindenburg', 'test', 'Paul von Hindenburg', 'hind@enburg.er', '0x6666666666', 0, 1, 1);
+# ID|NAME|PRICE
+INSERT INTO PRODUCTS VALUES (1, 'Bier', 1.0);
+INSERT INTO PRODUCTS VALUES (2, 'Limo', 0.7);
+INSERT INTO PRODUCTS VALUES (3, 'Makava', 1.0);
+#ID|PRODNR|CONSUMER|PRICE|TIME
+insert into consumed (prodnr, consumer, price, time) VALUES (1, 1, 1.0, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (1, 1, 1.0, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (1, 1, 1.0, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (1, 1, 1.0, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (2, 1, 0.7, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (2, 1, 0.7, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (2, 1, 0.7, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (3, 3, 1.0, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (3, 3, 1.0, CURRENT_TIMESTAMP);
+insert into consumed (prodnr, consumer, price, time) VALUES (3, 3, 1.0, CURRENT_TIMESTAMP);
+
+
+
+
+
+

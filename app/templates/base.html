@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	{% if title %}
+	<title> {{ title }} - Baroness </title>
+	{% else %}
+	<title> Des Bierbarons Helferin - Baroness </title>
+	{% endif  %}
+</head>
+
+<body>
+	<!-- Menu -->
+	<ul>
+		<li><a href="/index">Home</a></li>
+		{% if user %}
+		<li><a href="/logout">Logout</a></li>
+		<li><a href="/consume"> Konsumieren</a></li>
+		<li><a href="/personal">Personal</a></li>
+		{% if user.isbaron %}
+		<li><a href="/billing">Billing</a></li>
+		<li><a href="/manage_beverages">Konsumatverwaltung</a></li>
+		<li><a href="/manage_users">Konsumentenverwaltung</a></li>
+		{% endif %}
+		{% else %}
+		<li><a href="/login">Login</a></li>
+		{% endif %}
+	</ul>
+	{% if user %}
+	Du bist eingeloggt als {{user.longname}}.
+	{% endif %}
+	
+	{% block content %}{% endblock %}
+
+</body>
+
+</html>

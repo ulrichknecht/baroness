@@ -1,0 +1,18 @@
+{% extends "base.html"%}
+{% set title = "Konsumieren" %}
+{% block content %}
+	<h3>TODO: </h3>
+	<ul>
+		<li>add photos for products, add photos in database</li>
+	</ul>
+	<h1> Konsumieren </h1>
+	{% if message %}
+		<p> {{ message }} </p>
+	{% endif %}
+	<p>
+		Möchtest du etwas konsumieren?
+	{% for product in products %}
+		<div><p> {{ product.id }}, <a href="/consume?prodid={{product.id}}"> {{product.name}} </a>, {{product.price}} € </p> </div>
+	{% endfor %}
+	</p>
+{% endblock %}

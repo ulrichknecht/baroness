@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+{% set title = "Konsumatverwaltung" %}
+{% block content %}
+	<h3>TODO: </h3>
+	<ul>
+		<li>add "change products pages"</li>
+	</ul>
+	<h1> Konsumatverwaltung </h1>
+
+	{% for product in products %}
+		<div><p> {{ product.id }}, {{product.name}}, {{product.price}} €</p></div>
+	{% endfor %}
+	<a href=/manage_beverages/add>Getränk Hinzufügen</a></li>
+{% endblock %}

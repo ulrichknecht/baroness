@@ -1,0 +1,34 @@
+{% extends "base.html"%}
+{% set title = "Konsumentenverwaltung" %}
+{% block content %}
+	<h1> Konsumentenverwaltung </h1>
+	<p> TODO: many</p>
+	<table>
+  		<tr>
+    		<th>ID</th>
+    		<th>Username</th>
+    		<th>Name</th>
+			<th>E-mail</th>
+			<th>RFID-ID</th>
+			<th>Geschwärzt</th>
+			<th>Baron</th>
+			<th>Angezeigt</th>
+			<th></th>
+  		</tr>
+		{% for user in users %}
+		<tr>
+			<td>{{user.id}}</td>
+			<td>{{user.name}}</td>
+			<td>{{user.longname}}</td>
+			<td>{{user.email}}</td>
+			<td>{{user.rfid_id}}</td>
+			<td>{% if user.isblack %} &#9745; {% else %} &#9744; {% endif %} </td>
+			<td>{% if user.isbaron %} &#9745; {% else %} &#9744; {% endif %} </td>
+			<td>{% if user.isshown %} &#9745; {% else %} &#9744; {% endif %} </td>
+			<td> <a href="/manage_users/edit/{{user.name}}">bearbeiten</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	<br />
+	<a href=/manage_users/add>User Hinzufügen</a>
+{% endblock %}
