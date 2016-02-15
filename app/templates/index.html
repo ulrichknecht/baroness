@@ -4,6 +4,12 @@
 	<h3>TODO: </h3>
 	<ul>
 		<li> graphical beer list</li>
+        <img src="{{ url_for('static', filename='total.png') }}">
+        {% if user %}
+        {% set fils = "total%03d.png" % user.id %}
+    	<img src="{{ url_for('static', filename=fils) }}">
+	    {% endif %}
+
 	</ul>
 	<h1> Bierliste </h1>
 	<table>
