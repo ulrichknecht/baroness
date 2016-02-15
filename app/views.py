@@ -2,6 +2,7 @@ from check_rights import *
 from flask import render_template, request, redirect, session, send_from_directory
 from app import app
 from database import *
+from plot import *
 from user import User
 from product import Product
 from consumption import Consumption
@@ -17,6 +18,7 @@ def static_proxy(path):
 @app.route('/index')
 def index():
     consumed = get_consumed()
+    plot_total()
     return render_template("index.html", consumed=consumed, user=get_user_by_name(session.get('name')))
 
 
@@ -147,8 +149,9 @@ def consume():
         username = session.get('name')
         add_consume(username, prod.id)
         message = "Du hast gerade ein %s konsumiert." % prod.name
+        plot_total(get_user_by_name(session.get('name')))
+        plot_total()
     return render_template('consume.html', products=products, message=message, user=get_user_by_name(session.get('name')))
-
 
 @app.route('/billing')
 @requires_baron
