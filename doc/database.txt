@@ -32,7 +32,8 @@ CREATE TABLE USERS(
 CREATE TABLE PRODUCTS(
 	ID INTEGER PRIMARY KEY,
 	NAME TEXT NOT NULL,
-	PRICE REAK NOT NULL
+	PRICE REAL NOT NULL,
+	ISSHOWN BOOLEAN DEFAULT 0
 );
 
 # The table CONSUMED contains all products that have been consumed, who it consumend, when it was consumed,  and also if they have been payed allready, this is important because we do not want to have redunant data.
