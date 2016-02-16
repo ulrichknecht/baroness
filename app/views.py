@@ -19,6 +19,9 @@ def static_proxy(path):
 def index():
     consumed = get_consumed()
     plot_total()
+    plot_list(4)
+    #generate_test_users()
+    #generate_test_consumptions()
     return render_template("index.html", consumed=consumed, user=get_user_by_name(session.get('name')))
 
 

@@ -4,6 +4,7 @@ from app import app
 from user import User
 from product import Product
 from consumption import Consumption
+import random as rand
 import datetime
 
 DATABASE = 'test/database.db'
@@ -177,3 +178,40 @@ def add_consume(username, productid):
     query_db("INSERT INTO CONSUMED (PRODNR, CONSUMER, PRICE, TIME) VALUES (?, ?, ?, ?)", (str(product.id), str(consumerid), product.price, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     get_db().commit()
     print "consumed"
+
+    return
+
+##for testing only
+def generate_test_users():
+
+    for i in range(1, 30):
+        test = User
+        test.name = 'test' + str(i)
+        test.email = 'test' + str(i) + '@test.at'
+        test.password = 'test'
+        test.longname = 'Test User' + str(i)
+        test.rfid_id = '0x00000000'
+        add_user(test)
+    return
+
+def generate_test_consumptions():
+
+    #rand.seed(5)
+    num_u = len(get_users())
+    num_p = len(get_products())
+    u = 0
+    p = 0
+    for i in range(1, 666):
+        u = 1 + int(rand.random() * (1.0*num_u))
+        p = 1 + int(rand.random() * (1.0*num_p))
+        daysa = int(rand.random() * (30.0))
+        add_test_consume(u,p,daysa)
+    print 'trying to add ' +  str(p) + ' to ' + str(u)
+    return
+
+def add_test_consume(consumerid, productid, daysago):
+
+    product = get_product_by_id(productid)
+    query_db("INSERT INTO CONSUMED (PRODNR, CONSUMER, PRICE, TIME) VALUES (?, ?, ?, ?)", (str(product.id), str(consumerid), product.price, (datetime.datetime.now()-datetime.timedelta(days=daysago)).strftime("%Y-%m-%d %H:%M:%S")))
+    get_db().commit()
+    return
