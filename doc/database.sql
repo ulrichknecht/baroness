@@ -39,7 +39,6 @@ CREATE TABLE Users(
 	rfid_id TEXT,
 	isblack BOOLEAN DEFAULT 0,
 	isbaron BOOLEAN DEFAULT 0,
-	isadmin BOOLEAN DEFAULT 0,
 	isshown BOOLEAN DEFAULT 1
 );
 
@@ -71,10 +70,10 @@ CREATE TABLE Consumed(
 
 --------------------------------------------------------------------------------
 -- Test data 
-INSERT INTO Users(id,name,password,longname,email,rfid_id,isblack,isbaron,isadmin,isshown) VALUES 
-	(1, 'petra',      'test', 'Petra Besser',        'petra@bess.er',    '0x0123456789', 0, 0, 1, 1),
-	(2, 'peter',      'test', 'Peter Schlechter',    'peter@schlecht.er','0x0987654321', 0, 0, 1, 1),
-	(3, 'hindenburg', 'test', 'Paul von Hindenburg', 'hind@enburg.er',   '0x6666666666', 0, 1, 1, 1);
+INSERT INTO Users(id,name,password,longname,email,rfid_id,isblack,isbaron,isshown) VALUES
+	(1, 'petra',      'test', 'Petra Besser',        'petra@bess.er',    '0x0123456789', 0, 0, 1),
+	(2, 'peter',      'test', 'Peter Schlechter',    'peter@schlecht.er','0x0987654321', 0, 0, 1),
+	(3, 'hindenburg', 'test', 'Paul von Hindenburg', 'hind@enburg.er',   '0x6666666666', 0, 1, 1);
 
 
 INSERT INTO Products(id,name,price,isshown) VALUES 
