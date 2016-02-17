@@ -114,7 +114,7 @@ def plot_list(duration):
 
     i=0
     for consumptions in allconsumptions:
-        ax.barh(np.arange(len(consumptions)), consumptions, label=get_product_by_id(i+1).name, align='center', height=0.5, color=colors[i])
+        ax.barh(np.arange(len(consumptions)), consumptions, label=get_product_by_id(i+1).name, align='center', height=(0.5), color=colors[i])
         i+=1
 
     names = list()
@@ -148,5 +148,5 @@ def plot_list(duration):
     fig.set_size_inches(10.24, 7.68)
     plt.savefig('app/static/bierliste.png', dpi=100)
     #800x600
-    fig.set_size_inches(12, 8)
+    fig.set_size_inches(15, 10)
     plt.savefig('app/static/bierliste_small.png', dpi=72)

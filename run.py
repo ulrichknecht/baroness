@@ -7,10 +7,9 @@ import thread
 
 if __name__ == '__main__':
     #start gui
-    #wx = wx.App()
-    #gui.MainWindow(None)
-
-    #thread.start_new_thread(wx.MainLoop,())
+    wx = wx.App()
+    gui.MainWindow(None)
+    thread.start_new_thread(wx.MainLoop,())
 
     # start flask
     app.secret_key = urandom(24)

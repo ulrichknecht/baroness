@@ -18,8 +18,8 @@ def static_proxy(path):
 @app.route('/index')
 def index():
     consumed = get_consumed()
-    plot_total()
-    plot_list(4)
+    #plot_total()
+    #plot_list(4)
     #generate_test_users()
     #generate_test_consumptions()
     return render_template("index.html", consumed=consumed, user=get_user_by_name(session.get('name')))
@@ -213,6 +213,7 @@ def consume():
         message = "Du hast gerade ein %s konsumiert." % prod.name
         plot_total(get_user_by_name(session.get('name')))
         plot_total()
+        plot_list(4)
     return render_template('consume.html', products=products, message=message, user=get_user_by_name(session.get('name')))
 
 @app.route('/billing')
