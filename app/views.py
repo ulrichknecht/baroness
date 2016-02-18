@@ -6,7 +6,7 @@ from plot import *
 from user import User
 from product import Product
 from consumption import Consumption
-
+import bcrypt
 
 
 @app.route('/static/<path:path>')
@@ -41,7 +41,9 @@ def login():
         if u is None:
             error = 'User does not exist!'
             return render_template('login.html', error=error, user=get_user_by_name(session.get('name')))
-        if u.password != request.form['password']:
+        #if u.password != request.form['password']:
+        # bcrypt.checkpy(plaintxt, hash)
+        if not bcrypt.checkpw(request.form['password'], u.password):
             error = 'Wrong password!'
             return render_template('login.html', error=error, user=get_user_by_name(session.get('name')))
 
@@ -76,10 +78,11 @@ def manage_users_add():
             error = "Username not unique!"
 
         if request.form['password1'] == request.form['password2']:
-            u.password = request.form['password1']        	
+            #u.password = request.form['password1']
+            u.password = bcrypt.hashpw(request.form['password1'], bcrypt.gensalt())
         else:
-            error="Passwords do not match!"
-        u.longname=request.form['longname']
+            error = "Passwords do not match!"
+        u.longname = request.form['longname']
         u.email = request.form['email']
         u.rfid_id = request.form['rfid_id']
 
@@ -211,9 +214,7 @@ def consume():
         username = session.get('name')
         add_consume(username, prod.id)
         message = "Du hast gerade ein %s konsumiert." % prod.name
-        plot_total(get_user_by_name(session.get('name')))
-        plot_total()
-        plot_list(4)
+        plot_all_thread(get_user_by_name(session.get('name')))
     return render_template('consume.html', products=products, message=message, user=get_user_by_name(session.get('name')))
 
 @app.route('/personal')
@@ -224,5 +225,14 @@ def personal():
 @app.route('/billing')
 @requires_baron
 def billing():
-
     return render_template('billing.html', user=get_user_by_name(session.get('name')))
+
+#migrate the db to hashed passwords
+#@app.route('/hashdb')
+#@requires_baron
+#def hashdb():
+#    users = get_users()
+#    for user in users:
+#        user.password = bcrypt.hashpw(user.password, bcrypt.gensalt())
+#        update_user(user)
+#    return render_template('index.html', users=users, user=get_user_by_name(session.get('name')))

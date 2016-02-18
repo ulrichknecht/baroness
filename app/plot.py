@@ -3,9 +3,24 @@ from matplotlib.dates import WeekdayLocator, DayLocator, HourLocator, DateFormat
 import numpy as np
 from user import User
 from database import *
+import thread as th
+
+def plot_all_thread(user = None):
+    #if user != None:
+    #    th.start_new_thread(plot_all, (user,))
+    #else:
+    #    th.start_new_thread(plot_all, ())
+#def plot_all(user = None):
+#
+    if user != None:
+        plot_total(user)
+    plot_total()
+    plot_list(4)
+    print 'plot_all'
 
 def plot_total(user = None):
 
+    print 'plot_total'
     today = datetime.date.today()
     delta = datetime.timedelta(days=1)
     begin = datetime.date.today() - datetime.timedelta(weeks=2)
@@ -97,20 +112,27 @@ def plot_list(duration):
     for consumption in consumed:
         allconsumptions[consumption.prodnr-1][consumption.consumer-1] += 1
 
-    #print 'debug ------------------'
-    #print consumptions
-    #print '------------------------'
+    #cumulate consumptions for cumulative bar graph
+    i = 0
+    for consumptions in allconsumptions:
+        if i > 0:
+            j = 0
+            for consumption in consumptions:
+                allconsumptions[i][j] += allconsumptions[i-1][j]
+                j += 1
+        i += 1
 
     plt.xkcd()
 
     fig, ax = plt.subplots()
 
-    colors = ['red','green','blue']
+    colors = ['blue', 'green', 'red', 'yellow', 'orange' , 'black']
 
-    i=0
-    for consumptions in allconsumptions:
-        ax.barh(np.arange(len(consumptions)), consumptions, label=get_product_by_id(i+1).name, align='center', height=(0.5), color=colors[i])
-        i+=1
+    #plot reversed to print longest bar lowest
+    i = len(allconsumptions)
+    for consumptions in reversed(allconsumptions):
+        ax.barh(np.arange(len(consumptions)), consumptions, label=get_product_by_id(i).name, align='center', height=(0.5), color=colors[i-1])
+        i -= 1
 
     names = list()
 
@@ -126,7 +148,7 @@ def plot_list(duration):
 
     ax.yaxis.set_ticks_position('none')
     ax.xaxis.set_ticks_position('none')
-    plt.subplots_adjust(left=0.2)
+    plt.subplots_adjust(left=0.15)
     #plt.tick_params(which='minor', length=4)
     #plt.tick_params(which='major', length=5)
 

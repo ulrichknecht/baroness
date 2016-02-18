@@ -59,9 +59,7 @@ class MainWindow(wx.Frame):
         with app.app_context():
             for i in range(0, int(self.panelUser.GetAmount())):
                 add_consume(self.user.name, get_product_by_name(drink).id)
-        plot_total(self.user)
-        plot_total()
-        plot_list(4)
+        plot_all_thread(self.user)
         self.switchPanels()
 
     def switchPanels(self):
