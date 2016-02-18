@@ -4,6 +4,7 @@
 
 <head>
 	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="/static/style.css">
 	{% if title %}
 	<title> {{ title }} - Baroness </title>
 	{% else %}
@@ -13,27 +14,30 @@
 
 <body>
 	<!-- Menu -->
-	<h1> Menu </h1>
-	<ul>
-		<li><a href="/index">Home</a></li>
+	<div class="tops">
+		<h1> {{ title }} - Baroness</h1>
+		<a href="/index"><div class="item">Home</div></a>
 		{% if user %}
-		<li><a href="/logout">Logout</a></li>
-		<li><a href="/consume"> Konsumieren</a></li>
-		<li><a href="/personal">Personal</a></li>
+		<a href="/logout"><div class="item">Logout</div></a>
+		<a href="/consume"><div class="item">Konsumieren</div></a>
+		<a href="/personal"><div class="item">Personal</div></a>
 		{% if user.isbaron %}
-		<li><a href="/billing">Billing</a></li>
-		<li><a href="/manage_beverages">Konsumatverwaltung</a></li>
-		<li><a href="/manage_users">Konsumentenverwaltung</a></li>
+		<a href="/billing"><div class="item">Billing</div></a>
+		<a href="/manage_beverages"><div class="item">Konsumatverwaltung</div></a>
+		<a href="/manage_users"><div class="item">Konsumentenverwaltung</div></a>
 		{% endif %}
 		{% else %}
-		<li><a href="/login">Login</a></li>
+		<a href="/login"><div class="item right">Login</div></a>
 		{% endif %}
-	</ul>
+	</div>
 	{% if user %}
+	<div class="loggedin">
 	Du bist eingeloggt als {{user.longname}}
+	</div>
 	{% endif %}
+	<div class="mainblock">
 	{% block content %}{% endblock %}
-
+	</div>
 </body>
 
 </html>

@@ -216,6 +216,11 @@ def consume():
         plot_list(4)
     return render_template('consume.html', products=products, message=message, user=get_user_by_name(session.get('name')))
 
+@app.route('/personal')
+@requires_login
+def personal():
+    return render_template('personal.html', user=get_user_by_name(session.get('name')))
+
 @app.route('/billing')
 @requires_baron
 def billing():

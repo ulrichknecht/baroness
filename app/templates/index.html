@@ -3,17 +3,18 @@
 {% block content %}
 	<h3>TODO: </h3>
 	<ul>
-		<li> graphical beer list</li>
-        <img src="{{ url_for('static', filename='total.png') }}">
-        {% if user %}
+		<li>generate new plots if .png missing</li>
+	</ul>
+
+	<h1> Bierkonsum </h1>
+	<img src="{{ url_for('static', filename='total.png') }}">
+	{% if user %}
         {% set fils = "total%03d.png" % user.id %}
     	<img src="{{ url_for('static', filename=fils) }}">
-	    {% endif %}
-
-	</ul>
+	{% endif %}
 	<h1> Bierliste </h1>
 	<img src="{{ url_for('static', filename='bierliste_small.png') }}">
-	<table>
+	<!-- <table>
   		<tr>
     		<th>ID</th>
     		<th>Produkt Nummer</th>
@@ -30,5 +31,5 @@
 			<td>{{consumption.time}}</td>
 		</tr>
 		{% endfor %}
-	</table>
+	</table> -->
 {% endblock %}

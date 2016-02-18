@@ -1,1 +1,52 @@
-static css style sheet
+div.tops { background-color:#006699;
+            color:white;
+            padding:5px;
+            padding-left:20px;
+            overflow:hidden;
+            border-radius:5px;
+            border:0px solid black;
+}
+
+div.loggedin { background-color:#009966;
+                color:white;
+                padding:5px;
+                padding-left:20px;
+                overflow:hidden;
+                border-radius:5px;
+                border:0px solid black;
+}
+
+div.mainblock { background-color:white;
+                color:black;
+                padding:5px;
+                padding-left:20px;
+                overflow:hidden;
+                border-radius:5px;
+                border:1px solid black;
+}
+
+div.item {  float:left;
+            margin:3px;
+            padding:5px;
+            border:1px solid;
+            border-color:black;
+            border-radius:4px;
+            min-width:80px;
+            #line-height:25px;
+            background-color:#0088AA;
+            color:white;
+            text-align:center;
+            text-decoration:none;
+}
+
+div.item:hover { background-color:#00AA88;
+}
+
+div.item:active { background-color:AA8800;
+}
+
+.center {   text-align:center;
+}
+
+.right  {   float:right;
+}
