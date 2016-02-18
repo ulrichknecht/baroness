@@ -8,19 +8,14 @@ def plot_total(user = None):
 
     today = datetime.date.today()
     delta = datetime.timedelta(days=1)
-    begin = datetime.date.today() - datetime.timedelta(weeks=4)
-    dates = drange(begin, today, delta)
+    begin = datetime.date.today() - datetime.timedelta(weeks=2)
+    dates = drange(begin, today + delta, delta)
 
-#    all_consumptions = list(10)
- #   for consumptions in all_consumptions: #todo fix
-#    consumptions = np.zeros(len(dates))
-
+    print begin
+    print today
+    print dates
 
     allconsumptions = [[0 for x in range(len(dates))] for product in get_products()]
-    print allconsumptions
-#    allconsumptions = ()
-#    allconsumptions = allconsumptions + (np.zeros(len(dates)))
-    #print consumptions
 
     consumed = get_consumed()
     for consumption in consumed:
@@ -29,7 +24,7 @@ def plot_total(user = None):
             for consumptions in allconsumptions:
                 if consumption.prodnr == i:
                     if consumption.time.date() > begin:
-                        consumptions[(consumption.time.date() - begin).days - 1] += 1
+                        consumptions[(consumption.time.date() - begin).days] += 1
                 i += 1
     plt.xkcd()
 
