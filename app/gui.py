@@ -2,8 +2,8 @@
 import wx
 from plot import *
 from database import *
-
 import flask as fla
+
 class MainWindow(wx.Frame):
 
     def __init__(self, *args, **kwargs):
@@ -42,13 +42,14 @@ class MainWindow(wx.Frame):
         self.switchPanels()
 
     def onUser(self, e):
-        self.active = 1
         longn = e.GetEventObject().GetLabelText()
         for user in get_users():
             if user.longname == longn:
                 self.user = user
-        print self.user.id
-        print self.user.email
+        if not self.user.isblack:
+            self.active = 1 #getränkeauswahl
+        else:
+            self.active = 0 #start TODO: Sorry Bro Panel
         self.switchPanels()
 
     def onProduct(self, e):
@@ -124,12 +125,13 @@ class Panel1 (wx.Panel):
         buttonids = []
         i = 0
         for product in products:
-            #480x320
-            but = wx.Button(self, id=wx.ID_ANY, label=product.name + u"\n" + "%0.2f" % product.price, pos=(0+i*120, 0), size=(120, 120))
-            but.SetFont(wx.Font(23, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
-            print "Button %s created" % product.name
-            self.Bind(wx.EVT_BUTTON, parent.onProduct, id=but.Id)
-            i = i+1
+            if product.isshown:
+                #480x320
+                but = wx.Button(self, id=wx.ID_ANY, label=product.name + u"\n" + "%0.2f" % product.price, pos=(0+i*120, 0), size=(120, 120))
+                but.SetFont(wx.Font(23, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
+                print "Button %s created" % product.name
+                self.Bind(wx.EVT_BUTTON, parent.onProduct, id=but.Id)
+                i = i+1
 
         self.b_less = wx.Button(self, id = wx.ID_ANY, label=u"-", pos=(0,240), size=(120, 80))
         self.b_less.SetFont(wx.Font(60, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
@@ -178,18 +180,19 @@ class Panel2 (wx.Panel):
         users = get_users()
         names = list()
         for user in users:
-            names.append(user.longname)
+            if user.isshown:
+                names.append(user.longname)
 
-        i = 0
 
         self.but_names = list()
-        for user in users:
+        i = 0
+        for name in names:
             #480x320
-            but = wx.Button(self, id=wx.ID_ANY, label=names[i], pos=(0,0+i*40), size=(400, 40))
+            but = wx.Button(self, id=wx.ID_ANY, label=name, pos=(0,0+i*40), size=(400, 40))
             but.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
             self.Bind(wx.EVT_BUTTON, parent.onUser, id=but.Id)
             self.but_names.append(but)
-            i = i+1
+            i += 1
 
         b_up = wx.Button(self, id=wx.ID_ANY, label=u"\u25B2", pos=(400,0), size=(80, 80))
         b_up.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))

@@ -100,7 +100,7 @@ def add_user(u):
 
 def update_user(u):
     #query_db("UPDATE users SET (NAME, LONGNAME, EMAIL, RFID_ID, ISBLACK, ISBARON, ISSHOWN) VALUES (?, ?, ?, ?, ?, ?, ?) WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
-    query_db("UPDATE users SET NAME=?, PASSWORD=?, LONGNAME=?, EMAIL=?, RFID_ID=?, ISBLACK=?, ISBARON=?, ISSHOWN=? WHERE ID=?", (u.name, u.password, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
+    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, RFID_ID=?, ISBLACK=?, ISBARON=?, ISSHOWN=? WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
     get_db().commit()
 
 

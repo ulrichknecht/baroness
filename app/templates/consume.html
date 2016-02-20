@@ -10,9 +10,15 @@
 		<p> {{ message }} </p>
 	{% endif %}
 	<p>
-		Möchtest du etwas konsumieren?
-	{% for product in products %}
-		<div><p> {{ product.id }}, <a href="/consume?prodid={{product.id}}"> {{product.name}} </a>, {{"%0.2f" % product.price}} € </p> </div>
-	{% endfor %}
+		{% if user.isblack %}
+			Sorry, du bist geschwärzt!
+		{% else %}
+			Möchtest du etwas konsumieren?
+			{% for product in products %}
+				{% if product.isshown %}
+					<div><p> {{ product.id }}, <a href="/consume?prodid={{product.id}}"> {{product.name}} </a>, {{"%0.2f" % product.price}} € </p> </div>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
 	</p>
 {% endblock %}
