@@ -1,12 +1,20 @@
+/* STYLESHEET */
+/* Sets styles for menu/page design, tables (mostly for DIVs) and input forms*/
+
+/* SECTION: MENU/PAGE DESIGN */
+
+/* THE PAGE TOP MENU/TITLE */
 div.tops { background-color:#006699;
             color:white;
             padding:5px;
             padding-left:20px;
+            padding-right:20px;
             overflow:hidden;
             border-radius:5px;
             border:0px solid black;
 }
 
+/* NOTICE WHEN USER IS LOGGED IN */
 div.loggedin { background-color:#009966;
                 color:white;
                 padding:5px;
@@ -16,6 +24,7 @@ div.loggedin { background-color:#009966;
                 border:0px solid black;
 }
 
+/* BORDER AND PADDING FOR MAIN CONTENT */
 div.mainblock { background-color:white;
                 color:black;
                 padding:5px;
@@ -25,6 +34,7 @@ div.mainblock { background-color:white;
                 border:1px solid black;
 }
 
+/* MENU ITEM */
 div.item {  float:left;
             margin:3px;
             padding:5px;
@@ -39,14 +49,65 @@ div.item {  float:left;
             text-decoration:none;
 }
 
+/* MENU ITEM HOVER: greenish */
 div.item:hover { background-color:#00AA88;
 }
 
+/* MENU ITEM CLICK: orange, doesn't seem to work on chromium, but whatever */
 div.item:active { background-color:AA8800;
 }
+
+/* SECTION: GENERAL */
 
 .center {   text-align:center;
 }
 
 .right  {   float:right;
+}
+
+/* SECTION: TABLES */
+
+/* HEAD: Green, white font */
+th { background-color: #CF4C50;
+     color: white;
+}
+
+/* CONTENT: padded by 5px */
+th, td { border:1px solid #888888;
+         padding:5px;
+}
+
+/* TABLE: Single border around cells, full width */
+table { border-collapse: collapse;
+        width: 100%;
+}
+
+/* ROWS: Every second gray */
+tr:nth-child(even) {background-color: #f2f2f2
+}
+
+/* HOVERING OVER ROWS: Something red */
+tr:hover {background-color: #ffe5e5
+}
+
+/* SECTION: INPUT FORMS */
+
+input[type=text], input[type=password], input[type=number], input[type=email] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin: 8px 0px;
+    box-sizing: border-box;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+    width: 100%;
+    max-width: 300px;
+    background-color: #006699;
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+    margin: 8px 0px;
+    cursor: pointer;
 }

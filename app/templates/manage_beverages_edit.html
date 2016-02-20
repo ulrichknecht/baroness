@@ -1,7 +1,7 @@
 {% extends "base.html"%}
 {% set title = "Konsumat bearbeiten" %}
 {% block content %}
-	<h1> {{product_to_edit.name}} bearbeiten</h1>
+	<h1>Konsumat {{product_to_edit.name}} bearbeiten</h1>
 	{% if error %}
 		<p>Fehler: {{ error }}</p>
 	{% else %}
@@ -9,9 +9,9 @@
 		<p>{{ success }}</p>
 	{% endif %}
 	<form name="product" method="post" action="/manage_beverages/edit">
-		Userid: <input type="text" name="id" required value="{{product_to_edit.id}}" readonly="readonly" /> <br>
-		Username:<input type="text" name="name" required value="{{product_to_edit.name}}" /> <br>
-        Preis:<input type="number" name="price" step="any" required value="{{product_to_edit.price}}" /> € <br>
+		ProduktID:<br><input type="text" name="id" required value="{{product_to_edit.id}}" readonly="readonly" /> <br>
+		ProduktName:<br><input type="text" name="name" required value="{{product_to_edit.name}}" /> <br>
+        Preis:<br><input type="number" name="price" step="any" required value="{{product_to_edit.price}}" /> € <br>
 		Angezeigt: <input type="checkbox" name="isshown" {% if product_to_edit.isshown %} checked {% endif %} /><br>
 		<input type="submit" value="Übernehmen" />
 	</form>

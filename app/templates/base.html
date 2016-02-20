@@ -18,7 +18,7 @@
 		<h1> {{ title }} - Baroness</h1>
 		<a href="/index"><div class="item">Home</div></a>
 		{% if user %}
-		<a href="/logout"><div class="item">Logout</div></a>
+		<a href="/logout"><div class="item" style="float:right;">Logout</div></a>
 		<a href="/consume"><div class="item">Konsumieren</div></a>
 		<a href="/personal"><div class="item">Personal</div></a>
 		{% if user.isbaron %}
@@ -27,7 +27,7 @@
 		<a href="/manage_users"><div class="item">Konsumentenverwaltung</div></a>
 		{% endif %}
 		{% else %}
-		<a href="/login"><div class="item right">Login</div></a>
+		<a href="/login"><div class="item" style="float:right;">Login</div></a>
 		{% endif %}
 	</div>
 	{% if user %}

@@ -1,7 +1,7 @@
 {% extends "base.html"%}
 {% set title = "Konsumentin hinzufügen" %}
 {% block content %}
-	<h1> Konsumentin hinzufügen</h1>
+	<h1>Konsumentin hinzufügen</h1>
 	{% if error %}
 		<p>Fehler: {{ error }}</p>
 	{% endif %}
@@ -10,12 +10,12 @@
 	{% endif %}
 	<p> TODO: many </p>
 	<form name="user" method="post" action="/manage_users/add">
-		Username:<input type="text" name=username required placeholder="Username"><br>
-		Passwort:<input type="password" name=password1 required placeholder="Password"><br>
-		Passwort wiederholen:<input type="password" name=password2 required placeholder="Password"><br>
-		Name:<input type="text" name=longname required placeholder="Vorname Nachname"><br>
-		Email:<input type="email" name=email required placeholder="petra@fet.at"><br>
-		Euml ID:<input type="text" name=rfid_id required placeholder="0xDEADBEEF"><br>
+		Username:<br><input type="text" name=username required placeholder="Username"><br>
+		Passwort:<br><input type="password" name=password1 required placeholder="Password"><br>
+		Passwort wiederholen:<br><input type="password" name=password2 required placeholder="Password"><br>
+		Name:<br><input type="text" name=longname required placeholder="Vorname Nachname"><br>
+		Email:<br><input type="email" name=email required placeholder="petra@fet.at"><br>
+		Euml ID:<br><input type="text" name=rfid_id required placeholder="0xDEADBEEF"><br>
 		<input type="submit" value="Hinzufügen">
 	</form>
 {% endblock %}

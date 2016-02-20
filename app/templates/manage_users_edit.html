@@ -1,7 +1,7 @@
 {% extends "base.html"%}
 {% set title = "Konsumentin bearbeiten" %}
 {% block content %}
-	<h1> {{user.name}} bearbeiten</h1>
+	<h1>Konsumentin {{user_to_edit.name}} bearbeiten</h1>
 	{% if error %}
 		<p>Fehler: {{ error }}</p>
 	{% else %}
@@ -9,11 +9,11 @@
 		<p>{{ success }}</p>
 	{% endif %}
 	<form name="user" method="post" action="/manage_users/edit">
-		Userid: <input type="text" name="id" required value="{{user_to_edit.id}}" readonly="readonly" /> <br>
-		Username:<input type="text" name="username" required value="{{user_to_edit.name}}" /> <br>
-		Name:<input type="text" name="longname" required value="{{user_to_edit.longname}}" /><br>
-		Email:<input type="email" name="email" required value="{{user_to_edit.email}}" /><br>
-		Euml ID:<input type="text" name="rfid_id" required value="{{user_to_edit.rfid_id}}" /><br>
+		Userid:<br><input type="text" name="id" required value="{{user_to_edit.id}}" readonly="readonly" /> <br>
+		Username:<br><input type="text" name="username" required value="{{user_to_edit.name}}" /> <br>
+		Name:<br><input type="text" name="longname" required value="{{user_to_edit.longname}}" /><br>
+		Email:<br><input type="email" name="email" required value="{{user_to_edit.email}}" /><br>
+		Euml ID:<br><input type="text" name="rfid_id" required value="{{user_to_edit.rfid_id}}" /><br>
 		Geschwärzt: <input type="checkbox" name="isblack"  {% if user_to_edit.isblack %} checked {% endif %} /> <br>
 		Baron: <input type="checkbox" name="isbaron" {% if user_to_edit.isbaron %} checked {% endif %} /> <br>
 		Angezeigt: <input type="checkbox" name="isshown" {% if user_to_edit.isshown %} checked {% endif %} /><br>

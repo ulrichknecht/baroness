@@ -3,15 +3,15 @@
 {% block content %}
 	<h3>TODO: </h3>
 	<ul>
-		<li>encrypt and salt passwords</li>
+		<li>TODO?</li>
 	</ul>
 	<h1> Login </h1>
 	{% if error %}
 		<p>{{ error }}</p>
 	{% endif %}
 	<form name="login" method="post" action="/login">
-		Username:<input type="text" name=username required placeholder="Username"><br>
-		Passwort:<input type="password" name=password required placeholder="Password"><br>
-		<input type="submit" value="Login">
+		Username:<br><input type="text" name=username required placeholder="Username"><br>
+		Passwort:<br><input type="password" name=password required placeholder="Password"><br>
+				 <input type="submit" value="Login">
 	</form>
 {% endblock %}
