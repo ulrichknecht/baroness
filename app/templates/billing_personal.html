@@ -1,0 +1,23 @@
+{% extends "base.html"%}
+{% set title = "Persönliche Rechnung versenden" %}
+{% block content %}
+	<h3>TODO: </h3>
+	<ul>
+		<li>actual send emails</li>
+        <li>save default text somewhere and make it configureable</li>
+	</ul>
+	{% if success %}
+		<p>{{ success }}</p>
+	{% endif %}
+	<h1>Rechnung an {{user_to_bill.longname}} verschicken</h1>
+	<form name="billing" method="post" action="/billing/send_personal_bill/{{user_to_bill.name}}">
+        <textarea cols="80" rows="20">
+Hallo {{user_to_bill.longname}}
+du hast zurzeit viele Schulden.
+{% if user_to_bill.isblack %}Weil du zu hohe Schulden hast, bist du geschwärzt{% endif %}
+</textarea>
+
+		<input type="submit" value="Email versenden">
+	</form>
+	<p>An alle User Rechnungen <a href="/billing/send_all_bills"> versenden</a>.</p>
+{% endblock %}

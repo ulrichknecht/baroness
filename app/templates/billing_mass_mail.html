@@ -1,0 +1,23 @@
+{% extends "base.html"%}
+{% set title = "An alle User Rechnung versenden" %}
+{% block content %}
+	<h3>TODO: </h3>
+	<ul>
+		<li>actual send emails</li>
+        <li>save default text somewhere and make it configureable</li>
+		<li>parse wildcards</li>
+	</ul>
+	{% if success %}
+		<p>{{ success }}</p>
+	{% endif %}
+	<h1>Rechnung an alle verschicken</h1>
+	<form name="billing" method="post" action="/billing/send_all_bills">
+        <textarea cols="80" rows="20">
+Hallo %%longname%%
+du hast zurzeit viele Schulden.
+%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%endif%%
+</textarea>
+
+		<input type="submit" value="Email versenden">
+	</form>
+{% endblock %}

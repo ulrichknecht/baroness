@@ -222,10 +222,35 @@ def consume():
 def personal():
     return render_template('personal.html', user=get_user_by_name(session.get('name')))
 
-@app.route('/billing')
+@app.route('/billing', methods=['POST', 'GET'])
 @requires_baron
 def billing():
-    return render_template('billing.html', user=get_user_by_name(session.get('name')))
+    users = get_users()
+    if request.method == 'POST':
+        return render_template('billing.html', users=users, success="Not Implemented", dept=0, user=get_user_by_name(session.get('name')))
+    if request.method == 'GET':
+        return render_template('billing.html', users=users, dept=0, user=get_user_by_name(session.get('name')))
+
+
+@app.route('/billing/send_personal_bill/<name>', methods=['GET','POST'])
+@requires_baron
+def send_personal_bill(name=None):
+    if request.method == 'POST':
+        return "To be implemented"
+        #return redirect('/billing')
+
+    if request.method == 'GET':
+        return render_template('billing_personal.html', user_to_bill=get_user_by_name(name) ,user=get_user_by_name(session.get('name')))
+
+
+@app.route('/billing/send_all_bills', methods=['GET','POST'])
+@requires_baron
+def send_mass_mail(name=None):
+    if request.method == 'POST':
+        return "To be implemented"
+    if request.method == 'GET':
+        return render_template('billing_mass_mail.html', user=get_user_by_name(session.get('name')))
+
 
 #migrate the db to hashed passwords
 #@app.route('/hashdb')
