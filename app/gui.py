@@ -15,13 +15,14 @@ class MainWindow(wx.Frame):
         self.SetTitle('Baroness Control')
 
         self.panelStart = PanelStart(self)
-        self.panelUser = Panel1(self)
-        self.panelList = Panel2(self)
+        self.panelDrinks = PanelDrinks(self)
+        self.panelUsers = PanelUsers(self)
         self.panelThanks = PanelThanks(self)
+        self.panelSorry = PanelSorry(self)
 
-        self.active = 0
         self.user = User()
 
+        self.active = 0
         self.switchPanels()
 
         self.Show()
@@ -47,53 +48,50 @@ class MainWindow(wx.Frame):
             if user.longname == longn:
                 self.user = user
         if not self.user.isblack:
-            self.panelUser.l_user.SetLabel(self.user.longname)
             self.active = 1 #getränkeauswahl
         else:
-            self.active = 0 #start TODO: Sorry Bro Panel
+            self.active = 4 #Sorry Bro Panel
         self.switchPanels()
 
     def onProduct(self, e):
         self.active = 3
         print self.user.longname + ' consumes'
         buttonl = e.GetEventObject().GetLabelText()
-        drink = buttonl.split('\n')[0]
+        drink = get_product_by_name(buttonl.split('\n')[0]).id
         with app.app_context():
-            for i in range(0, int(self.panelUser.GetAmount())):
-                add_consume(self.user.name, get_product_by_name(drink).id)
+            for i in range(0, int(self.panelDrinks.GetAmount())):
+                add_consume(self.user.name, drink)
         plot_all_thread(self.user)
         self.switchPanels()
 
     def switchPanels(self):
+        self.panelStart.Hide()
+        self.panelDrinks.Hide()
+        self.panelUsers.Hide()
+        self.panelThanks.Hide()
+        self.panelSorry.Hide()
         if self.active == 0:
             self.panelStart.Show()
-            self.panelUser.Hide()
-            self.panelList.Hide()
-            self.panelThanks.Hide()
         elif self.active == 1:
-            self.panelStart.Hide()
-            self.panelUser.Show()
-            self.panelList.Hide()
-            self.panelThanks.Hide()
+            self.panelDrinks.l_user.SetLabel(self.user.longname)
+            self.panelDrinks.Show()
         elif self.active == 2:
-            self.panelStart.Hide()
-            self.panelUser.Hide()
-            self.panelList.Show()
-            self.panelThanks.Hide()
+            self.panelUsers.Show()
         elif self.active == 3:
-            self.panelStart.Hide()
-            self.panelUser.Hide()
-            self.panelList.Hide()
-            self.panelThanks.Show()
             self.panelThanks.label_1.SetLabel(self.user.longname)
+            self.panelThanks.Show()
             self.delayExit()
+        elif self.active == 4:
+            self.panelSorry.label_1.SetLabel(self.user.longname)
+            self.panelSorry.Show()
+
 
 class PanelStart (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
         #panel = wx.Panel(self, -1)
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./app/static/start.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/start.png", wx.BITMAP_TYPE_ANY))
         self.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
 
@@ -101,13 +99,14 @@ class PanelStart (wx.Panel):
         print "close"
         self.Destroy()
 
+
 class PanelThanks (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
         #panel = wx.Panel(self, -1)
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./app/static/thanks.png", wx.BITMAP_TYPE_ANY))
-        self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/thanks.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
         self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
         self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
 
@@ -115,12 +114,28 @@ class PanelThanks (wx.Panel):
         print "close"
         self.Destroy()
 
-class Panel1 (wx.Panel):
+
+class PanelSorry (wx.Panel):
+
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        #panel = wx.Panel(self, -1)
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/sorry.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
+        self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
+        self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
+
+    def on_quit(self, e):
+        print "close"
+        self.Destroy()
+
+
+class PanelDrinks (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
 
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./app/static/products.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/products.png", wx.BITMAP_TYPE_ANY))
 
         products = get_products()
         buttonids = []
@@ -174,12 +189,12 @@ class Panel1 (wx.Panel):
         self.Destroy()
 
 
-class Panel2 (wx.Panel):
+class PanelUsers (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, size=(480, 320))
 
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./app/static/users.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/users.png", wx.BITMAP_TYPE_ANY))
 
         users = get_users()
         names = list()
@@ -214,11 +229,15 @@ class Panel2 (wx.Panel):
 
     #This is bad programming :)
     def on_down(self,e , id=-1):
+        if self.but_names[len(self.but_names)-1].GetPosition()[1] < 320:
+            return
         for button in self.but_names:
             button.SetPosition((button.GetPosition()[0],button.GetPosition()[1]-320))
         self.Layout()
 
     def on_up(self,e , id=-1):
+        if self.but_names[0].GetPosition()[1] == 0:
+            return
         for button in self.but_names:
             button.SetPosition((button.GetPosition()[0],button.GetPosition()[1]+320))
         self.Layout()
