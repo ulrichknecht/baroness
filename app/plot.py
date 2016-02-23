@@ -23,14 +23,15 @@ def plot_total(user = None):
     print 'plot_total'
     today = datetime.date.today()
     delta = datetime.timedelta(days=1)
-    begin = datetime.date.today() - datetime.timedelta(weeks=2)
+    begin = today - datetime.timedelta(weeks=2)
     dates = drange(begin, today + delta, delta)
 
-    print begin
-    print today
-    print dates
+    #print begin
+    #print today
+    #print dates
 
-    allconsumptions = [[0 for x in range(len(dates))] for product in get_products()]
+    products = get_products()
+    allconsumptions = [[0 for x in range(len(dates))] for product in products]
 
     consumed = get_consumed()
     for consumption in consumed:
@@ -43,12 +44,12 @@ def plot_total(user = None):
                 i += 1
     plt.xkcd()
 
-    print allconsumptions
+    #print allconsumptions
     fig, ax = plt.subplots()
-    i=1
 
+    i = 0
     for consumptions in allconsumptions:
-        ax.plot(dates, consumptions, linestyle='-', marker='', label=get_product_by_id(i).name)
+        ax.plot(dates, consumptions, linestyle='-', marker='', label=products[i].name)
         i += 1
 
     ax.legend(loc=2,prop={'size':15})
@@ -96,17 +97,18 @@ def plot_total(user = None):
     fig.set_size_inches(4.8, 3.2)
     plt.savefig(fils, dpi=100)
 
-    fig.set_size_inches(4.8, 3.2)
-    plt.savefig(fill, dpi=400)
+    #fig.set_size_inches(4.8, 3.2)
+    #plt.savefig(fill, dpi=400)
 
 def plot_list(duration):
 
     today = datetime.date.today()
-    begin = datetime.date.today() - datetime.timedelta(weeks=duration)
+    begin = today - datetime.timedelta(weeks=duration)
 
     users = get_users()
+    products = get_products()
     #consumptions = [0 for user in users]
-    allconsumptions = [[0 for user in users] for product in get_products()]
+    allconsumptions = [[0 for user in users] for product in products]
 
     consumed = get_consumed()
     for consumption in consumed:
@@ -129,9 +131,9 @@ def plot_list(duration):
     colors = ['blue', 'green', 'red', 'yellow', 'orange' , 'black']
 
     #plot reversed to print longest bar lowest
-    i = len(allconsumptions)
+    i = len(allconsumptions) - 1
     for consumptions in reversed(allconsumptions):
-        ax.barh(np.arange(len(consumptions)), consumptions, label=get_product_by_id(i).name, align='center', height=(0.5), color=colors[i-1])
+        ax.barh(np.arange(len(consumptions)), consumptions, label=products[i].name, align='center', height=(0.5), color=colors[i])
         i -= 1
 
     names = list()
@@ -162,8 +164,8 @@ def plot_list(duration):
     plt.title("Bierliste")
 
     #1024x768
-    fig.set_size_inches(10.24, 7.68)
-    plt.savefig('app/static/bierliste.png', dpi=100)
+    #fig.set_size_inches(10.24, 7.68)
+    #plt.savefig('app/static/bierliste.png', dpi=100)
     #800x600
     fig.set_size_inches(15, 10)
     plt.savefig('app/static/bierliste_small.png', dpi=72)
