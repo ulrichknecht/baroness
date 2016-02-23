@@ -1,25 +1,31 @@
+#import matplotlib #speed?
+#matplotlib.use('GTKAgg')
 from matplotlib import pyplot as plt
 from matplotlib.dates import WeekdayLocator, DayLocator, HourLocator, DateFormatter, drange, MONDAY
 import numpy as np
 from user import User
 from database import *
-import thread as th
+import multiprocessing as mp
 
-def plot_all_thread(user = None):
-    #if user != None:
-    #    th.start_new_thread(plot_all, (user,))
-    #else:
-    #    th.start_new_thread(plot_all, ())
-#def plot_all(user = None):
-#
-    if user != None:
+
+def plot_all_thread(user=None):
+    if user is not None:
+        proc = mp.Process(target=plot_all, args=(user,))
+    else:
+        proc = mp.Process(target=plot_all, args=())
+    proc.start()
+
+
+def plot_all(user=None):
+    if user is not None:
         plot_total(user)
     plot_total()
     plot_list(4)
     print 'plot_all'
 
-def plot_total(user = None):
 
+def plot_total(user=None):
+    print "start plot_total " + str(datetime.datetime.now())
     print 'plot_total'
     today = datetime.date.today()
     delta = datetime.timedelta(days=1)
@@ -92,16 +98,17 @@ def plot_total(user = None):
         fils = "app/static/total%03d.png" % user.id
         fill = "app/static/total%03d_big.png" % user.id
     plt.title(tit)
-
+    print "plot plot_total " + str(datetime.datetime.now())
     #480x320
     fig.set_size_inches(4.8, 3.2)
     plt.savefig(fils, dpi=100)
-
+    print "end plot_total " + str(datetime.datetime.now())
     #fig.set_size_inches(4.8, 3.2)
     #plt.savefig(fill, dpi=400)
 
-def plot_list(duration):
 
+def plot_list(duration):
+    print "start plot_list " + str(datetime.datetime.now())
     today = datetime.date.today()
     begin = today - datetime.timedelta(weeks=duration)
 
@@ -167,5 +174,7 @@ def plot_list(duration):
     #fig.set_size_inches(10.24, 7.68)
     #plt.savefig('app/static/bierliste.png', dpi=100)
     #800x600
+    print "plot plot_list " + str(datetime.datetime.now())
     fig.set_size_inches(15, 10)
     plt.savefig('app/static/bierliste_small.png', dpi=72)
+    print "end plot_list " + str(datetime.datetime.now())

@@ -130,6 +130,21 @@ class PanelSorry (wx.Panel):
         self.Destroy()
 
 
+class PanelRfid (wx.Panel):
+
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        #panel = wx.Panel(self, -1)
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/rfid.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
+        self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
+        self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
+
+    def on_quit(self, e):
+        print "close"
+        self.Destroy()
+
+
 class PanelDrinks (wx.Panel):
 
     def __init__(self, parent):
@@ -207,7 +222,7 @@ class PanelUsers (wx.Panel):
         i = 0
         for name in names:
             #480x320
-            self.but = wx.Button(self, id=wx.ID_ANY, label=name, pos=(0,0+i*40), size=(400, 40))
+            self.but = wx.Button(self, id=wx.ID_ANY, label=name, pos=(0,0+i*80), size=(400, 80))
             self.but.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
             self.but.Bind(wx.EVT_LEFT_DOWN, parent.onUser, id=self.but.Id)
             self.but_names.append(self.but)
