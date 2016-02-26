@@ -7,6 +7,7 @@ from user import User
 from product import Product
 from consumption import Consumption
 import bcrypt
+import os
 
 
 @app.route('/static/<path:path>')
@@ -151,7 +152,7 @@ def manage_beverages():
 def manage_beverages_edit(name=None):
     if request.method == 'GET':
         error = None
-        p = get_product_by_name(name);
+        p = get_product_by_name(name)
 
         if p is None:
             error = "Product existiert nicht"
@@ -169,6 +170,16 @@ def manage_beverages_edit(name=None):
             p.isshown = True
         else:
             p.isshown = False
+
+        pic = request.files['file']
+        print pic.filename
+        if pic:
+            extension = pic.filename.rsplit('.', 1)[1].lower()
+            print extension
+            if extension == "png" or extension == "jpg":
+                pic.seek(0) # Move cursor back to beginning so we can write to disk
+                fpath = os.path.join("./app/static/", "product_%s.png" % p.name)
+                pic.save(fpath)
 
         update_product(p)
 
@@ -194,6 +205,16 @@ def manage_beverages_add():
             p.isshown = True
         else:
             p.isshown = False
+
+        pic = request.files['file']
+        print pic.filename
+        if pic:
+            extension = pic.filename.rsplit('.', 1)[1].lower()
+            print extension
+            if extension == "png" or extension == "jpg":
+                pic.seek(0) # Move cursor back to beginning so we can write to disk
+                fpath = os.path.join("./app/static/", "product_%s.png" % p.name)
+                pic.save(fpath)
 
         if error is None:
             add_product(p)

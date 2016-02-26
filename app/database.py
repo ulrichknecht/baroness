@@ -150,9 +150,10 @@ def add_product(p):
 
 def get_consumed(user=None, startdate=None, enddate=None):
 
-    if user is None and startdate is None and enddate is None:
+    if user is None:
         rows = query_db('SELECT * FROM CONSUMED')
-
+    else:
+        rows = query_db('SELECT * FROM CONSUMED WHERE CONSUMER=?', [get_user_by_name(user).id])
     consumed = []
     for row in rows:
         #ID|PRODNR|CONSUMER|PRICE|TIME
@@ -163,8 +164,9 @@ def get_consumed(user=None, startdate=None, enddate=None):
         #2016-01-27 12:59:04
         c.price = float(row[3])
         c.time = datetime.datetime.strptime(row[4], "%Y-%m-%d %H:%M:%S")
-        consumed.append(c)
-
+        if startdate is None or c.time > startdate:
+            if enddate is None or c.time < enddate:
+                consumed.append(c)
     return consumed
 
 def add_consume(username, productid):

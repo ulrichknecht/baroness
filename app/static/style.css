@@ -49,6 +49,18 @@ div.item {  float:left;
             text-decoration:none;
 }
 
+/* PRODUCT FRAME */
+div.product { float:left;
+              min-width:144px;
+              min-height:144px;
+              background-color:#CC3333;
+              color:white;
+              padding:5px;
+              margin:5px;
+              border-radius:1px;
+              border:1px solid black;
+}
+
 /* MENU ITEM HOVER: greenish */
 div.item:hover { background-color:#00AA88;
 }

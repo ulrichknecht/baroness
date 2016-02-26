@@ -9,10 +9,11 @@
 		<p>{{ success }}</p>
 	{% endif %}
 	<p> TODO: many </p>
-	<form name="user" method="post" action="/manage_beverages/add">
+	<form name="user" method="post" action="/manage_beverages/add" enctype="multipart/form-data">
 		Produktname:<br><input type="text" name="name" required><br>
 		Preis:<br><input type="number" name="price" step="any" required value="0.0" /> € <br>
 		Angezeigt: <input type="checkbox" name="isshown" checked /><br>
+		Bild: <input type="file" name="file"><br>
 		<input type="submit" value="Hinzufügen">
 	</form>
 {% endblock %}

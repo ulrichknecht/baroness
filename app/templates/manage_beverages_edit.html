@@ -8,11 +8,12 @@
 	{% if success %}
 		<p>{{ success }}</p>
 	{% endif %}
-	<form name="product" method="post" action="/manage_beverages/edit">
+	<form name="product" method="post" action="/manage_beverages/edit" enctype="multipart/form-data">
 		ProduktID:<br><input type="text" name="id" required value="{{product_to_edit.id}}" readonly="readonly" /> <br>
 		ProduktName:<br><input type="text" name="name" required value="{{product_to_edit.name}}" /> <br>
         Preis:<br><input type="number" name="price" step="any" required value="{{product_to_edit.price}}" /> € <br>
 		Angezeigt: <input type="checkbox" name="isshown" {% if product_to_edit.isshown %} checked {% endif %} /><br>
+		Bild: <input type="file" name="file"><br>
 		<input type="submit" value="Übernehmen" />
 	</form>
 	{% endif %}

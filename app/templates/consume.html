@@ -1,24 +1,32 @@
 {% extends "base.html"%}
 {% set title = "Konsumieren" %}
 {% block content %}
-	<h3>TODO: </h3>
-	<ul>
-		<li>add photos for products, add photos in database</li>
-	</ul>
 	<h1> Konsumieren </h1>
 	{% if message %}
-		<p> {{ message }} </p>
+		<div class="loggedin"> {{ message }} </div>
 	{% endif %}
-	<p>
+	<div>
 		{% if user.isblack %}
 			Sorry, du bist geschwärzt!
 		{% else %}
-			Möchtest du etwas konsumieren?
+			<h2>Möchtest du etwas konsumieren?</h2>
 			{% for product in products %}
 				{% if product.isshown %}
-					<div><p> {{ product.id }}, <a href="/consume?prodid={{product.id}}"> {{product.name}} </a>, {{"%0.2f" % product.price}} € </p> </div>
+					<a href="/consume?prodid={{product.id}}">
+						<div class="product">
+							<!-- Produkt {{ product.id }} <br>-->
+							<div class="center">
+								<h2>{{product.name}}</h2>
+								{% set fils = "product_%s.png" % product.name %}
+								<img src="{{ url_for('static', filename=fils) }}" /><br>
+							</div>
+							<div class="right">
+							{{"%0.2f" % product.price}} €
+							</div>
+						</div>
+					</a>
 				{% endif %}
 			{% endfor %}
 		{% endif %}
-	</p>
+	</div>
 {% endblock %}
