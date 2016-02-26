@@ -220,7 +220,12 @@ def consume():
 @app.route('/personal')
 @requires_login
 def personal():
-    return render_template('personal.html', user=get_user_by_name(session.get('name')))
+    name = session.get('name')
+    consumed=get_consumed(name)
+    owed = 0
+    for consumption in consumed:
+        owed += consumption.price
+    return render_template('personal.html', user=get_user_by_name(name), consumed=consumed, products=get_products(), deposited=555.55, owed=owed)
 
 @app.route('/billing', methods=['POST', 'GET'])
 @requires_baron

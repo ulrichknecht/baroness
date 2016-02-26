@@ -1,17 +1,52 @@
 {% extends "base.html"%}
 {% set title = "Personal" %}
 {% block content %}
-	<h3>TODO: </h3>
-	<ul>
-		<li>add money owed</li>
-	</ul>
 	<h1> Statistik </h1>
-
+	<div>
 	<h2> Bierkonsum </h2>
 	<img src="{{ url_for('static', filename='total.png') }}">
 	{% if user %}
         {% set fils = "total%03d.png" % user.id %}
     	<img src="{{ url_for('static', filename=fils) }}">
 	{% endif %}
-
+	</div>
+	<h1> Abrechnung </h1>
+	<div>
+		<h2>Gesamt</h2>
+		<p>Einzahlungen (TODO): {{ "%0.2f" % deposited }} €</p>
+		<p>Konsumationen: {{ "%0.2f" % owed }} €</p>
+		<p>Total: {{ "%0.2f" % (deposited - owed)}} €</p>
+	</div>
+	<div>
+		<h2>Einzahlungen (TODO)</h2>
+		<table>
+			<tr>
+				<th>Datum</th>
+				<th>Betrag</th>
+			</tr>
+			{% for deposit in deposits %}
+			<tr>
+				<td>{{deposit.time}}</td>
+				<td>{{ "%0.2f" % deposit.amount}} €</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<div>
+		<h2>Konsumationen</h2>
+		<table>
+			<tr>
+				<th>Datum</th>
+				<th>Produkt</th>
+				<th>Preis</th>
+			</tr>
+			{% for consumption in consumed %}
+			<tr>
+				<td>{{consumption.time}}</td>
+				<td>{{products[consumption.prodnr-1].name}}</td> <!-- #is there a better way? -->
+				<td>{{ "%0.2f" % consumption.price}} €</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock %}
