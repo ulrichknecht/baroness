@@ -64,6 +64,16 @@ CREATE TABLE Consumed(
 	FOREIGN KEY(consumer) REFERENCES USERS(id)
 );
 
+-- The table Deposits contains all money deposits done by the users
+CREATE TABLE Deposits(
+    id INTEGER PRIMARY KEY,
+    userid INTEGER NOT NULL,
+    amount REAL DEFAULT 0.0,
+    time DATETIME,
+
+    FOREIGN KEY(userid) REFERENCES USERS(id)
+);
+
 -- The table Config stores basic config data, this is for the admins and the barons
 
 

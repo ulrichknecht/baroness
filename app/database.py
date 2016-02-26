@@ -4,6 +4,7 @@ from app import app
 from user import User
 from product import Product
 from consumption import Consumption
+from deposit import Deposit
 import random as rand
 import datetime
 
@@ -182,6 +183,24 @@ def add_consume(username, productid):
     print "consumed"
 
     return
+
+def get_deposits(userid = None):
+    #ID|USERID|AMOUNT|TIME
+    if userid == None:
+        rows = query_db("SELECT * FROM DEPOSITS")
+    else:
+        rows = query_db("SELECT * FROM DEPOSITS WHERE USERID = ?", [str(userid)])
+    deposits = []
+    if rows == None:
+        return deposits
+    for row in rows:
+        d = Deposit()
+        d.id = row[0]
+        d.userid = row[1]
+        d.amount = row[2]
+        d.time = datetime.datetime.strptime(row[3], "%Y-%m-%d %H:%M:%S")
+        deposits.append(d)
+    return deposits
 
 ##for testing only
 def generate_test_users():

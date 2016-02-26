@@ -242,11 +242,20 @@ def consume():
 @requires_login
 def personal():
     name = session.get('name')
-    consumed=get_consumed(name)
+    user=get_user_by_name(name)
+
+    consumed = get_consumed(name)
     owed = 0
     for consumption in consumed:
         owed += consumption.price
-    return render_template('personal.html', user=get_user_by_name(name), consumed=consumed, products=get_products(), deposited=555.55, owed=owed)
+
+    deposits = get_deposits(user.id)
+    deposited = 0
+    for deposit in deposits:
+        deposited += deposit.amount
+
+    return render_template('personal.html', user=user, consumed=consumed,
+                           products=get_products(), deposits=deposits, deposited=deposited, owed=owed)
 
 @app.route('/billing', methods=['POST', 'GET'])
 @requires_baron
