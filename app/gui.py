@@ -89,9 +89,9 @@ class MainWindow(wx.Frame):
 class PanelStart (wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
         #panel = wx.Panel(self, -1)
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/start.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/start.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
 
@@ -103,9 +103,9 @@ class PanelStart (wx.Panel):
 class PanelThanks (wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
         #panel = wx.Panel(self, -1)
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/thanks.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/thanks.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
         self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
         self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
@@ -118,9 +118,9 @@ class PanelThanks (wx.Panel):
 class PanelSorry (wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
         #panel = wx.Panel(self, -1)
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/sorry.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/sorry.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
         self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
         self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
@@ -133,9 +133,9 @@ class PanelSorry (wx.Panel):
 class PanelRfid (wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
         #panel = wx.Panel(self, -1)
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/rfid.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/rfid.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
         self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
         self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
@@ -148,9 +148,9 @@ class PanelRfid (wx.Panel):
 class PanelDrinks (wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos = wx.DefaultPosition, size=(480, 320))
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
 
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/products.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/products.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
 
         products = get_products()
         buttonids = []
@@ -207,9 +207,9 @@ class PanelDrinks (wx.Panel):
 class PanelUsers (wx.Panel):
 
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, id=wx.ID_ANY, size=(480, 320))
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
 
-        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/users.png", wx.BITMAP_TYPE_ANY))
+        self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/users.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
 
         users = get_users()
         names = list()
