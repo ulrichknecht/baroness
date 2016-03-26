@@ -15,12 +15,14 @@
 #
 ################################################################
 
+
 class Settings:
 
     def __init__(self):
         ##User Interaction
         #Gui
         self.hideGuiList = False    #Show the consumers in the gui
+        self.disableRFID = False    #Disable RFID Reading
         self.allowHiding = False    #Allow a user to hide from the gui consumer list
         self.onlyOneDrink = False   #Hide selection for amount in the gui
         self.drinkLimit = 20        #Max amount of consumptions in the gui (default 20)
@@ -40,3 +42,5 @@ class Settings:
 
         ##Developer Settings
         self.debug = False          #Show debug output in console
+
+settings = Settings()
