@@ -170,6 +170,7 @@ def get_consumed(user=None, startdate=None, enddate=None):
                 consumed.append(c)
     return consumed
 
+
 def add_consume(username, productid):
 
     consumerid = query_db("SELECT ID FROM USERS WHERE NAME = ?", [username], one=True)
@@ -183,6 +184,19 @@ def add_consume(username, productid):
     print "consumed"
 
     return
+
+
+def get_debt(name=None):
+    consumptions = get_consumed(name)
+    debt = 0
+    for consumption in consumptions:
+        debt += consumption.price
+
+    deposits = get_deposits(get_user_by_name(name).id)
+    for deposit in deposits:
+        debt -= deposit.amount
+    return debt
+
 
 def get_deposits(userid = None):
     #ID|USERID|AMOUNT|TIME
