@@ -273,7 +273,10 @@ def billing():
 
         return render_template('billing.html', users=users, success="Writing to database is not implemented", dept=0, user=get_user_by_name(session.get('name')))
     if request.method == 'GET':
-        return render_template('billing.html', users=users, dept=0, user=get_user_by_name(session.get('name')))
+        debt = [0 for user in users]
+        for user in users:
+            debt[user.id-1] = get_debt(user.name)
+        return render_template('billing.html', users=users, debt=debt, user=get_user_by_name(session.get('name')))
 
 
 @app.route('/billing/send_personal_bill/<name>', methods=['GET', 'POST'])

@@ -23,7 +23,7 @@
 			<tr>
 				<td>{{user.longname}}</td>
 				<td>{% if user.isblack %} &#9745; {% else %} &#9744; {% endif %}</td>
-				<td>{{dept}} € </td>
+				<td>{{debt[user.id-1]}} € </td>
 				<td> <input  type="number" name="{{user.name}}_payed" step="any" required value="0" /> € </td>
 				<td>Einzelne Rechnung <a href="/billing/send_personal_bill/{{user.name}}">versenden</a></td>
 			</tr>
