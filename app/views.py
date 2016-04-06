@@ -262,16 +262,21 @@ def personal():
 @requires_baron
 def billing():
     users = get_users()
+
     if request.method == 'POST':
         for user in users:
             formname = "%s_payed" % user.name
             if formname in request.form:
                 # add payment here
                 payment = float(request.form[formname])
+                if payment != 0:
+                    add_deposit(user.name, payment)
                 print "%s payed %d" % (user.name, payment)
+        debt = [0 for user in users]
+        for user in users:
+            debt[user.id-1] = get_debt(user.name)
 
-
-        return render_template('billing.html', users=users, success="Writing to database is not implemented", dept=0, user=get_user_by_name(session.get('name')))
+        return render_template('billing.html', users=users, success="Writing to database is not implemented", debt=debt, user=get_user_by_name(session.get('name')))
     if request.method == 'GET':
         debt = [0 for user in users]
         for user in users:
@@ -290,10 +295,10 @@ def send_personal_bill(name=None):
         send_email(u.email, subject, message)
 
         success = "Die Rechnung wurde an %s versendet." %u.longname
-        return render_template('billing.html', users=users, success=success, dept=0, user=get_user_by_name(session.get('name')))
+        return render_template('billing.html', users=users, success=success, dept=0,  user=get_user_by_name(session.get('name')))
 
     if request.method == 'GET':
-        return render_template('billing_personal.html', user_to_bill=get_user_by_name(name) ,user=get_user_by_name(session.get('name')))
+        return render_template('billing_personal.html', user_to_bill=get_user_by_name(name), dept=get_debt(name), user=get_user_by_name(session.get('name')))
 
 
 @app.route('/billing/send_all_bills', methods=['GET', 'POST'])

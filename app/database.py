@@ -195,6 +195,8 @@ def get_debt(name=None):
     deposits = get_deposits(get_user_by_name(name).id)
     for deposit in deposits:
         debt -= deposit.amount
+
+    debt = round(debt, 2)
     return debt
 
 
@@ -215,6 +217,16 @@ def get_deposits(userid = None):
         d.time = datetime.datetime.strptime(row[3], "%Y-%m-%d %H:%M:%S")
         deposits.append(d)
     return deposits
+
+def add_deposit(username, amount):
+    consumerid = query_db("SELECT ID FROM USERS WHERE NAME = ?", [username], one=True)
+    consumerid = int(consumerid[0])
+    query_db("INSERT INTO DEPOSITS (USERID, AMOUNT, TIME) VALUES (?, ?, ?)", (str(consumerid), amount, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+    get_db().commit()
+    print "deposit"
+
+    return
+
 
 ##for testing only
 def generate_test_users():

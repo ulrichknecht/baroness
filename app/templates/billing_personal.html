@@ -14,7 +14,7 @@
 		Betreff:<input type="text" name="subject" value="Bierrechnung von der Baroness"/> <br />
         <textarea cols="80" rows="20" name="message">
 Hallo {{user_to_bill.longname}}
-du hast zurzeit n€ Schulden.
+du hast zurzeit {{dept}} € Schulden.
 {% if user_to_bill.isblack %}Weil du zu hohe Schulden hast, bist du geschwärzt.{% endif %}
 Bitte überweise den Betrag an das Konto:
 			Peter Schleter;
