@@ -11,13 +11,20 @@
 	{% endif %}
 	<h1>Rechnung an {{user_to_bill.longname}} verschicken</h1>
 	<form name="billing" method="post" action="/billing/send_personal_bill/{{user_to_bill.name}}">
-        <textarea cols="80" rows="20">
+		Betreff:<input type="text" name="subject" value="Bierrechnung von der Baroness"/> <br />
+        <textarea cols="80" rows="20" name="message">
 Hallo {{user_to_bill.longname}}
-du hast zurzeit viele Schulden.
-{% if user_to_bill.isblack %}Weil du zu hohe Schulden hast, bist du geschwärzt{% endif %}
-</textarea>
+du hast zurzeit n€ Schulden.
+{% if user_to_bill.isblack %}Weil du zu hohe Schulden hast, bist du geschwärzt.{% endif %}
+Bitte überweise den Betrag an das Konto:
+			Peter Schleter;
+			IBAN; BIC;
 
+dein Baron,
+{{user.longname}}
+</textarea><br />
 		<input type="submit" value="Email versenden">
 	</form>
 	<p>An alle User Rechnungen <a href="/billing/send_all_bills"> versenden</a>.</p>
+
 {% endblock %}
