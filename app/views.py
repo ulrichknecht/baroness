@@ -135,6 +135,12 @@ def manage_users_edit(name=None):
         else:
             u.isshown = False
 
+        if 'autoblack' in request.form:
+            u.autoblack = True
+        else:
+            u.autoblack = False
+
+
         update_user(u)
 
         return redirect('/manage_users')
@@ -273,6 +279,7 @@ def billing():
                     add_deposit(user.name, payment)
                 print "%s payed %d" % (user.name, payment)
         debt = [0 for user in users]
+        users = get_users()  # refresh users for correct viewing of autounblacking
         for user in users:
             debt[user.id-1] = get_debt(user.name)
 

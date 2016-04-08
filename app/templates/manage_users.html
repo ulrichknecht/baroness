@@ -13,6 +13,7 @@
 			<th>Geschwärzt</th>
 			<th>Baron</th>
 			<th>Angezeigt</th>
+			<th>Auto-Schwärzen</th>
 			<th></th>
   		</tr>
 		{% for user in users %}
@@ -25,6 +26,7 @@
 			<td>{% if user.isblack %} &#9745; {% else %} &#9744; {% endif %} </td>
 			<td>{% if user.isbaron %} &#9745; {% else %} &#9744; {% endif %} </td>
 			<td>{% if user.isshown %} &#9745; {% else %} &#9744; {% endif %} </td>
+			<td>{% if user.autoblack %} &#9745; {% else %} &#9744; {% endif %} </td>
 			<td> <a href="/manage_users/edit/{{user.name}}">bearbeiten</a></td>
 		</tr>
 		{% endfor %}

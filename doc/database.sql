@@ -39,7 +39,8 @@ CREATE TABLE Users(
 	rfid_id TEXT,
 	isblack BOOLEAN DEFAULT 0,
 	isbaron BOOLEAN DEFAULT 0,
-	isshown BOOLEAN DEFAULT 1
+	isshown BOOLEAN DEFAULT 1,
+	autoblack BOOLEAN DEFAULT 1
 );
 
 -- The table PRODUCTS contains information about the beverages available

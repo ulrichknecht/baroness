@@ -7,6 +7,7 @@ from consumption import Consumption
 from deposit import Deposit
 import random as rand
 import datetime
+from settings import settings
 
 DATABASE = 'test/database.db'
 
@@ -56,6 +57,7 @@ def get_user(u):
     u.isblack=row[6]
     u.isbaron=row[7]
     u.isshown=row[8]
+    u.autoblack=row[9]
     print u
     return u
 
@@ -73,6 +75,7 @@ def get_user_by_name(name):
     u.isblack=row[6]
     u.isbaron=row[7]
     u.isshown=row[8]
+    u.autoblack=row[9]
     print u
     return u
 
@@ -90,6 +93,7 @@ def get_users():
         u.isblack=row[6]
         u.isbaron=row[7]
         u.isshown=row[8]
+        u.autoblack=row[9]
         users.append(u)
     return users
 
@@ -101,7 +105,7 @@ def add_user(u):
 
 def update_user(u):
     #query_db("UPDATE users SET (NAME, LONGNAME, EMAIL, RFID_ID, ISBLACK, ISBARON, ISSHOWN) VALUES (?, ?, ?, ?, ?, ?, ?) WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
-    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, RFID_ID=?, ISBLACK=?, ISBARON=?, ISSHOWN=? WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
+    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, RFID_ID=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=? WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.autoblack, u.id))
     get_db().commit()
 
 
@@ -181,6 +185,12 @@ def add_consume(username, productid):
     #INSERT INTO USERS (NAME, PASSWORD, LONGNAME, EMAIL, RFID_ID) VALUES (? ,? ,?, ?, ?)", (u.name, u.password, u.longname, u.email, u.rfid_id))
     query_db("INSERT INTO CONSUMED (PRODNR, CONSUMER, PRICE, TIME) VALUES (?, ?, ?, ?)", (str(product.id), str(consumerid), product.price, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     get_db().commit()
+
+    if settings.autoBlack:
+        if get_debt(name=username) > settings.blockLimit:
+            u = get_user_by_name(username)
+            u.isblack = True
+            update_user(u)
     print "consumed"
 
     return
@@ -223,6 +233,11 @@ def add_deposit(username, amount):
     consumerid = int(consumerid[0])
     query_db("INSERT INTO DEPOSITS (USERID, AMOUNT, TIME) VALUES (?, ?, ?)", (str(consumerid), amount, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     get_db().commit()
+    if settings.autoUnblack:
+        if get_debt(name=username) < settings.blockLimit:
+            u = get_user_by_name(username)
+            u.isblack = False
+            update_user(u)
     print "deposit"
 
     return
