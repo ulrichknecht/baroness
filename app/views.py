@@ -5,6 +5,7 @@ from database import *
 from plot import *
 from user import User
 from product import Product
+from send_email import send_email, send_emails
 from consumption import Consumption
 import bcrypt
 import os
@@ -134,6 +135,12 @@ def manage_users_edit(name=None):
         else:
             u.isshown = False
 
+        if 'autoblack' in request.form:
+            u.autoblack = True
+        else:
+            u.autoblack = False
+
+
         update_user(u)
 
         return redirect('/manage_users')
@@ -261,8 +268,22 @@ def personal():
 @requires_baron
 def billing():
     users = get_users()
+
     if request.method == 'POST':
-        return render_template('billing.html', users=users, success="Not Implemented", dept=0, user=get_user_by_name(session.get('name')))
+        for user in users:
+            formname = "%s_payed" % user.name
+            if formname in request.form:
+                # add payment here
+                payment = float(request.form[formname])
+                if payment != 0:
+                    add_deposit(user.name, payment)
+                print "%s payed %d" % (user.name, payment)
+        debt = [0 for user in users]
+        users = get_users()  # refresh users for correct viewing of autounblacking
+        for user in users:
+            debt[user.id-1] = get_debt(user.name)
+
+        return render_template('billing.html', users=users, success="Writing to database is not implemented", debt=debt, user=get_user_by_name(session.get('name')))
     if request.method == 'GET':
         debt = [0 for user in users]
         for user in users:
@@ -270,22 +291,41 @@ def billing():
         return render_template('billing.html', users=users, debt=debt, user=get_user_by_name(session.get('name')))
 
 
-@app.route('/billing/send_personal_bill/<name>', methods=['GET','POST'])
+@app.route('/billing/send_personal_bill/<name>', methods=['GET', 'POST'])
 @requires_baron
 def send_personal_bill(name=None):
     if request.method == 'POST':
-        return "To be implemented"
-        #return redirect('/billing')
+        users = get_users()
+        u = get_user_by_name(name)
+        message = request.form['message']
+        subject = request.form['subject']
+        send_email(u.email, subject, message)
+
+        success = "Die Rechnung wurde an %s versendet." %u.longname
+        return render_template('billing.html', users=users, success=success, dept=0,  user=get_user_by_name(session.get('name')))
 
     if request.method == 'GET':
-        return render_template('billing_personal.html', user_to_bill=get_user_by_name(name) ,user=get_user_by_name(session.get('name')))
+        return render_template('billing_personal.html', user_to_bill=get_user_by_name(name), dept=get_debt(name), user=get_user_by_name(session.get('name')))
 
 
-@app.route('/billing/send_all_bills', methods=['GET','POST'])
+@app.route('/billing/send_all_bills', methods=['GET', 'POST'])
 @requires_baron
 def send_mass_mail(name=None):
     if request.method == 'POST':
-        return "To be implemented"
+        users = get_users()
+        u = get_user_by_name(name)
+        message = request.form['message']
+        subject = request.form['subject']
+
+        send_emails(message, subject, users)
+        #for user in users:
+        #    message_parsed = parse_email(message, user, 3) # change ammount of depts here
+        #    subject_parsed = parse_email(subject, user, 3) # change ammount of depts here!
+        #    send_email(user.email, subject_parsed, message_parsed)
+
+        success = "An alle user werden Rechnungen versendet."
+        return render_template('billing.html', users=users, success=success, dept=0, user=get_user_by_name(session.get('name')))
+
     if request.method == 'GET':
         return render_template('billing_mass_mail.html', user=get_user_by_name(session.get('name')))
 

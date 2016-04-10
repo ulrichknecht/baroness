@@ -1,23 +1,34 @@
 {% extends "base.html"%}
-{% set title = "An alle User Rechnung versenden" %}
+{% set title = "An alle User Rechnungen versenden" %}
 {% block content %}
 	<h3>TODO: </h3>
 	<ul>
 		<li>actual send emails</li>
         <li>save default text somewhere and make it configureable</li>
-		<li>parse wildcards</li>
+		<li>insert the right ammount of dept</li>
 	</ul>
 	{% if success %}
 		<p>{{ success }}</p>
 	{% endif %}
 	<h1>Rechnung an alle verschicken</h1>
 	<form name="billing" method="post" action="/billing/send_all_bills">
-        <textarea cols="80" rows="20">
+		Betreff:<input type="text" name="subject" value="Bierrechnung von der Baroness"/> <br />
+        <textarea cols="80" rows="20" name="message">
 Hallo %%longname%%
-du hast zurzeit viele Schulden.
-%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%endif%%
-</textarea>
+du hast %%dept%%€ Schulden.
+Bitte überweise diesen Betrag an das Konto:
 
+%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%end_if_is_black%%
+</textarea><br />
+		<p> Warnung: Das versenden vieler emails dauert ein weilchen.</p>
 		<input type="submit" value="Email versenden">
 	</form>
+
+	<h1>Kommandos</h1>
+	<p>Der text den du eingibst wird von der Baroness noch personalisiert. Folgende Komandos kennt die Baroness.</p>
+	<ul>
+		<li> <b>%%longname%%</b> fügt den vollen namen des Benutzers ein.</li>
+		<li> <b>%%dept%%</b> fügt die Höhe der Schulden des Benutzers ein. </li>
+		<li> <b>%%if_is_black%% TEXT %%end_if_is_black%%</b> fügt den TEXT ein, falls der user geschwärzt ist.</li>
+	</ul>
 {% endblock %}

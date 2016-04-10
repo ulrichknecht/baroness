@@ -274,7 +274,7 @@ class PanelUsers (wx.Panel):
 
             self.but.SetBackgroundColour((255-(i*20 % 40), (160+(i*50 % 100)), 0))
             #self.but.SetForegroundColour("#006699")
-            self.but.SetPressColor(wx.Color(255,255,255,0))
+            self.but.SetPressColor(wx.Colour(255,255,255,0))
             self.but.SetFont(wx.Font(25, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
             self.but.Bind(wx.EVT_LEFT_DOWN, parent.onUser, id=self.but.Id)
             self.but_names.append(self.but)

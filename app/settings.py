@@ -32,8 +32,8 @@ class Settings:
 
         ##Payment Incentives
         #Money Limit
-        self.autoBlock = False      #Automatically block user if money owed > limit
-        self.autoUnblock = False    #Automatically unblock user if money owed < limit
+        self.autoBlack = True       #Automatically block user if money owed > limit
+        self.autoUnblack = True     #Automatically unblock user if money owed < limit
         self.blockLimit = 150       #Money limit for automatic blocking (default 150)
         #Mail Spam
         self.autoAnnoy = False      #Automatically send payment eMails

@@ -10,6 +10,7 @@ class User:
         self.isblack=False
         self.isbaron=False
         self.isshown=False
+        self.autoblack=False
 
 
     def __str__(self):
@@ -61,6 +62,14 @@ class User:
                 s = "%s, True" % s
 
         if self.isshown is None:
+            s = "%s, None" % s
+        else:
+            if self.isshown is 0 or self. isshown is False:
+                s = "%s, False" % s
+            else:
+                s = "%s, True" % s
+
+        if self.autoblack is None:
             s = "%s, None" % s
         else:
             if self.isshown is 0 or self. isshown is False:

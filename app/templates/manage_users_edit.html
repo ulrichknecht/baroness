@@ -17,6 +17,7 @@
 		Geschwärzt: <input type="checkbox" name="isblack"  {% if user_to_edit.isblack %} checked {% endif %} /> <br>
 		Baron: <input type="checkbox" name="isbaron" {% if user_to_edit.isbaron %} checked {% endif %} /> <br>
 		Angezeigt: <input type="checkbox" name="isshown" {% if user_to_edit.isshown %} checked {% endif %} /><br>
+		Auto-Schwärzen: <input type="checkbox" name="autoblack" {% if user_to_edit.autoblack %} checked {% endif %} /><br>
 		<input type="submit" value="Übernehmen" />
 	</form>
 	{% endif %}
