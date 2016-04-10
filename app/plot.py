@@ -82,10 +82,6 @@ def plot_total(user=None):
     #ax.fmt_xdata = DateFormatter('%d.%m')
     fig.autofmt_xdate()
 
-    plt.annotate(
-        'THE DAY I REALIZED\nI COULD COOK BACON\nWHENEVER I WANTED',
-        xy=(30, 1), arrowprops=dict(arrowstyle='->'), xytext=(15, -10))
-
     plt.xlabel('Datum')
     plt.ylabel('Konsumate')
 
@@ -109,7 +105,7 @@ def plot_total(user=None):
 
 def plot_list(duration):
     print "start plot_list " + str(datetime.datetime.now())
-    today = datetime.date.today()
+    today = datetime.datetime.today()
     begin = today - datetime.timedelta(weeks=duration)
 
     users = get_users()
@@ -117,7 +113,8 @@ def plot_list(duration):
     #consumptions = [0 for user in users]
     allconsumptions = [[0 for user in users] for product in products]
 
-    consumed = get_consumed()
+    consumed = get_consumed(startdate=begin)
+
     for consumption in consumed:
         allconsumptions[consumption.prodnr-1][consumption.consumer-1] += 1
 
@@ -134,13 +131,23 @@ def plot_list(duration):
     plt.xkcd()
 
     fig, ax = plt.subplots()
+    ax.grid(True, linewidth=0.5)
+    ax.grid(True, linewidth=0.5, which='minor')
+    ax.yaxis.grid(False, which='major')
+    ax.yaxis.grid(True, which='minor')
 
     colors = ['blue', 'green', 'red', 'yellow', 'orange' , 'black']
 
     #plot reversed to print longest bar lowest
     i = len(allconsumptions) - 1
     for consumptions in reversed(allconsumptions):
-        ax.barh(np.arange(len(consumptions)), consumptions, label=products[i].name, align='center', height=(0.5), color=colors[i])
+        x = list()
+        y = list()
+        for j, consumption in enumerate(consumptions):
+            x += list(np.arange(1, consumption+1)-0.5)
+            y += list(np.multiply(j, np.ones(consumption)))
+        ax.scatter(x, y, marker='x', s=70, color = colors[i], label=products[i].name)
+        #ax.barh(np.arange(len(consumptions)), consumptions, label=products[i].name, align='center', height=(0.5), color=colors[i])
         i -= 1
 
     names = list()
@@ -148,33 +155,35 @@ def plot_list(duration):
     for user in users:
         names.append(user.longname)
 
+    #ticks
     plt.yticks(np.arange(len(names)), names)
-
-    ax.legend(loc=2)
+    ax.set_yticks(np.arange(len(names))-0.5, minor=True)
+    #limits
+    plt.ylim(-0.5, len(names)-0.5)
+    plt.xlim(0)
+    #legend = auto
+    ax.legend(loc=0)
 
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
 
     ax.yaxis.set_ticks_position('none')
     ax.xaxis.set_ticks_position('none')
+
     plt.subplots_adjust(left=0.15)
     #plt.tick_params(which='minor', length=4)
     #plt.tick_params(which='major', length=5)
 
-    #plt.annotate(
-    #    'THE DAY I REALIZED\nI COULD COOK BACON\nWHENEVER I WANTED',
-    #    xy=(30, 1), arrowprops=dict(arrowstyle='->'), xytext=(15, -10))
-
     plt.xlabel('Konsumate')
     #plt.ylabel('Konsumate')
 
-    plt.title("Bierliste")
+    plt.title("Bierliste ("+ str(duration) + " Wochen)")
 
+    print "plot plot_list " + str(datetime.datetime.now())
+    #800x600
+    fig.set_size_inches(15, 10)
+    plt.savefig('app/static/bierliste_small.png', dpi=72, bbox_inches='tight')
     #1024x768
     #fig.set_size_inches(10.24, 7.68)
     #plt.savefig('app/static/bierliste.png', dpi=100)
-    #800x600
-    print "plot plot_list " + str(datetime.datetime.now())
-    fig.set_size_inches(15, 10)
-    plt.savefig('app/static/bierliste_small.png', dpi=72)
     print "end plot_list " + str(datetime.datetime.now())

@@ -1,4 +1,4 @@
-#/bin/python
+#!/usr/bin/python
 import wx
 from app import app
 from os import urandom
