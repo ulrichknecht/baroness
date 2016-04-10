@@ -161,6 +161,7 @@ def plot_list(duration):
     #limits
     plt.ylim(-0.5, len(names)-0.5)
     plt.xlim(0)
+    plt.gca().set_xlim(right=30)
     #legend = auto
     ax.legend(loc=0)
 
