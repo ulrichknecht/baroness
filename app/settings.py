@@ -22,7 +22,7 @@ class Settings:
         ##User Interaction
         #Gui
         self.hideGuiList = False    #Show the consumers in the gui
-        self.disableRFID = False    #Disable RFID Reading
+        self.enableRFID = False     #Enable RFID Reading
         self.allowHiding = False    #Allow a user to hide from the gui consumer list
         self.onlyOneDrink = False   #Hide selection for amount in the gui
         self.drinkLimit = 20        #Max amount of consumptions in the gui (default 20)

@@ -76,6 +76,24 @@ def get_user_by_name(name):
     print u
     return u
 
+def get_user_by_rfid(rfidid):
+    row = query_db("SELECT * FROM USERS WHERE RFID_ID = ?", [rfidid], one=True)
+    u = User()
+    if row is None:
+         return None
+    u.id=row[0]
+    u.name=row[1]
+    u.password=row[2]
+    u.longname=row[3]
+    u.email=row[4]
+    u.rfid_id=row[5]
+    u.isblack=row[6]
+    u.isbaron=row[7]
+    u.isshown=row[8]
+    u.autoblack=row[9]
+    print u
+    return u
+
 def get_users():
     rows = query_db("SELECT * FROM USERS")
     users = []

@@ -6,7 +6,8 @@ from plot import *
 from database import *
 from settings import *
 import flask as fla
-
+if settings.enableRFID:
+    import rfid
 
 class MainWindow(wx.Frame):
 
@@ -17,8 +18,11 @@ class MainWindow(wx.Frame):
         self.panelUsers = PanelUsers(self)
         self.panelThanks = PanelThanks(self)
         self.panelSorry = PanelSorry(self)
+        self.panelRFID = PanelRFID(self)
 
-        self.settings = Settings()
+        if settings.enableRFID:
+            self.rfid = rfid.RFID(self.on_rfid)
+
         self.user = User()
         self.drinkl = str()
         self.active = 0
@@ -57,10 +61,23 @@ class MainWindow(wx.Frame):
         for user in get_users():
             if user.longname == longn:
                 self.user = user
-        if not self.user.isblack:
-            self.active = 1 #getränkeauswahl
+        if self.user.isblack:
+            self.active = 4 #Sorry Bro
         else:
-            self.active = 4 #Sorry Bro Panel
+            self.active = 1 #Drinks
+        self.switchPanels()
+
+    def on_rfid(self, rfidid):
+        if self.active != 0:
+            return
+        self.user = get_user_by_rfid(rfidid)
+        if self.user is None:
+            self.panelRFID.label_1.SetLabel(rfidid)
+            self.active = 5 #TODO: Screen showing RFID ID
+        elif self.user.isblack:
+            self.active = 4 #Sorry Bro
+        else:
+            self.active = 1 #Drinks
         self.switchPanels()
 
     def onProduct(self, e):
@@ -80,6 +97,7 @@ class MainWindow(wx.Frame):
         self.panelUsers.Hide()
         self.panelThanks.Hide()
         self.panelSorry.Hide()
+        self.panelRFID.Hide()
         if self.active == 0:
             self.panelStart.Show()
         elif self.active == 1:
@@ -101,7 +119,8 @@ class MainWindow(wx.Frame):
         elif self.active == 4:
             self.panelSorry.label_1.SetLabel(self.user.longname)
             self.panelSorry.Show()
-
+        elif self.active == 5:
+            self.panelRFID.Show()
 
 class PanelStart (wx.Panel):
 
@@ -154,7 +173,7 @@ class PanelSorry (wx.Panel):
         self.Destroy()
 
 
-class PanelRfid (wx.Panel):
+class PanelRFID (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
