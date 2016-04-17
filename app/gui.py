@@ -9,10 +9,14 @@ import flask as fla
 if settings.enableRFID:
     import rfid
 
+
 class MainWindow(wx.Frame):
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+        self.SetSize((480, 320))
+        self.SetTitle('Baroness Control')
+
         self.panelStart = PanelStart(self)
         self.panelDrinks = PanelDrinks(self)
         self.panelUsers = PanelUsers(self)
@@ -24,14 +28,8 @@ class MainWindow(wx.Frame):
             self.rfid = rfid.RFID(self.on_rfid)
 
         self.user = User()
-        self.drinkl = str()
-        self.active = 0
-
-        self.init_ui()
-
-    def init_ui(self):
-        self.SetSize((480, 320))
-        self.SetTitle('Baroness Control')
+        self.rfidid = ""
+        self.drinkl = ""
 
         self.active = 0
         self.switchPanels()
@@ -47,10 +45,6 @@ class MainWindow(wx.Frame):
 
     def getUser(self):
         return self.user.id
-    #    return self.user
-
-    def getDrink(self):
-        return self.drink
 
     def onExit(self, e=None):
         self.active = 0
@@ -70,15 +64,17 @@ class MainWindow(wx.Frame):
     def on_rfid(self, rfidid):
         if self.active != 0:
             return
+        self.rfidid = rfidid
         self.user = get_user_by_rfid(rfidid)
         if self.user is None:
-            self.panelRFID.label_1.SetLabel(rfidid)
-            self.active = 5 #TODO: Screen showing RFID ID
+            self.active = 5 #Screen showing RFID ID            
         elif self.user.isblack:
             self.active = 4 #Sorry Bro
         else:
             self.active = 1 #Drinks
-        self.switchPanels()
+        print "switching panels", self.active
+        #has to be called from main thread!!
+        wx.CallAfter(self.switchPanels)
 
     def onProduct(self, e):
         self.active = 3
@@ -92,22 +88,25 @@ class MainWindow(wx.Frame):
         self.switchPanels()
 
     def switchPanels(self):
+        active = self.active
         self.panelStart.Hide()
         self.panelDrinks.Hide()
         self.panelUsers.Hide()
         self.panelThanks.Hide()
         self.panelSorry.Hide()
         self.panelRFID.Hide()
-        if self.active == 0:
+        if active == 0:
+            if settings.enableRFID:
+                self.rfid.start()
             self.panelStart.Show()
-        elif self.active == 1:
+        elif active == 1:
             if not settings.onlyOneDrink:
                 self.panelDrinks.l_amount.SetLabel("%02d" % 1)
             self.panelDrinks.l_user.SetLabel(self.user.longname)
             self.panelDrinks.Show()
-        elif self.active == 2:
+        elif active == 2:
             self.panelUsers.Show()
-        elif self.active == 3:
+        elif active == 3:
             self.panelThanks.label_1.SetLabel(self.user.longname + "\n" + "%02d x " % int(self.panelDrinks.GetAmount()) + self.drinkl.split('\n')[0])
             self.panelThanks.label_1.Wrap(340)
             try:
@@ -116,32 +115,29 @@ class MainWindow(wx.Frame):
                 print "no picture for drink:", self.drinkl.split('\n')
             self.panelThanks.Show()
             self.delayExit()
-        elif self.active == 4:
+        elif active == 4:
             self.panelSorry.label_1.SetLabel(self.user.longname)
             self.panelSorry.Show()
-        elif self.active == 5:
+        else: #active == 5:
+            self.panelRFID.label_1.SetLabel(self.rfidid)
             self.panelRFID.Show()
+
 
 class PanelStart (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
-        #panel = wx.Panel(self, -1)
         self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/start.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         if not settings.hideGuiList:
             self.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
             self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onStart)
-
-    def on_quit(self, e):
-        print "close"
-        self.Destroy()
 
 
 class PanelThanks (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
-        #panel = wx.Panel(self, -1)
+
         self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/thanks.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.bitmap_2 = wx.StaticBitmap(self, wx.ID_ANY, wx.NullBitmap, pos=(10, 10))
 
@@ -149,43 +145,25 @@ class PanelThanks (wx.Panel):
         self.label_1.SetFont(wx.Font(25, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.label_1.SetForegroundColour("white")
 
-        #self.l_product = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(120, 100), size=(340, 100))
-        #self.l_product.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
-        #self.l_product.SetForegroundColour("white")
-
-    def on_quit(self, e):
-        print "close"
-        self.Destroy()
-
 
 class PanelSorry (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
-        #panel = wx.Panel(self, -1)
         self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/sorry.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
         self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
         self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
-
-    def on_quit(self, e):
-        print "close"
-        self.Destroy()
 
 
 class PanelRFID (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
-        #panel = wx.Panel(self, -1)
         self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/rfid.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
         self.bitmap_1.Bind(wx.EVT_LEFT_DOWN, parent.onExit)
-        self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100))
+        self.label_1 = wx.StaticText(self, wx.ID_ANY, 'bla blub', pos=(100,100), size=(100,220))
         self.label_1.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
-
-    def on_quit(self, e):
-        print "close"
-        self.Destroy()
 
 
 class PanelDrinks (wx.Panel):
@@ -227,9 +205,6 @@ class PanelDrinks (wx.Panel):
         self.l_user = wx.StaticText(self, wx.ID_ANY, "todo", pos=(20,170), style=wx.ALIGN_CENTER)
         self.l_user.SetFont(wx.Font(25, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
 
-        self.Bind(wx.EVT_CLOSE, self.on_quit)
-        #self.Show(True)
-
     def onMore(self,e, id=-1):
         self.amount = int(self.l_amount.GetLabelText()) + 1
         if self.amount <= settings.drinkLimit:
@@ -244,10 +219,6 @@ class PanelDrinks (wx.Panel):
 
     def GetAmount(self):
         return int(self.l_amount.GetLabelText())
-
-    def on_quit(self, e):
-        print "close"
-        self.Destroy()
 
 
 class PanelUsers (wx.Panel):
@@ -267,7 +238,6 @@ class PanelUsers (wx.Panel):
         i = 0
         for name in names:
             #480x320
-            #self.but = wx.Button (self, id=wx.ID_ANY, label=name, pos=(0,0+i*80), size=(400, 80))
             self.but = wx.lib.platebtn.PlateButton(self, label=name, pos=(3, 3+i*80),
                                                    style=wx.BU_EXACTFIT | wx.lib.platebtn.PB_STYLE_SQUARE)
             self.but.SetSize((392, 74))
@@ -291,8 +261,6 @@ class PanelUsers (wx.Panel):
         self.b_exit = wx.Button(self, id=wx.ID_ANY, label="X", pos=(400, 120), size=(80, 80))
         self.b_exit.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.b_exit.Bind(wx.EVT_LEFT_DOWN, parent.onExit, id=self.b_exit.Id)
-        self.Bind(wx.EVT_CLOSE, self.on_quit)
-        #self.Show(True)
 
     #This is bad programming :)
     def on_down(self,e , id=-1):
@@ -308,16 +276,3 @@ class PanelUsers (wx.Panel):
         for button in self.but_names:
             button.SetPosition((button.GetPosition()[0], button.GetPosition()[1]+320))
         self.Layout()
-
-    def on_button_press(self,e, id=-1):
-        print e.Id
-        print id
-        #if id == self.b_down.Id:
-
-    def trap(self, e):
-        e.Skip()
-        return
-
-    def on_quit(self, e):
-        print "close"
-        self.Destroy()

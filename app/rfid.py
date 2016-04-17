@@ -5,6 +5,7 @@ except:
     exit()
 import signal
 import thread
+import time
 
 
 class RFID:
@@ -17,20 +18,23 @@ class RFID:
         thread.start_new_thread(self.read, ())
 
     def read(self):
-        while self.loop:
-            (status, tagtype) = self.reader.MFRC522_Request(self.reader.PICC_REQIDL)
-            print "RFID Status:", status 
-            if status == self.reader.MI_OK:
-                (status, uid) = self.reader.MFRC522_Anticoll()
+        while True:
+            while self.loop:
+                (status, tagtype) = self.reader.MFRC522_Request(self.reader.PICC_REQIDL)
+                print "RFID Status:", status 
                 if status == self.reader.MI_OK:
-                    uids = "0x" + "".join(format(x, '02x') for x in uid)
-                    self.callback(uids)
-                    print "RFID Detect:",uids
+                    (status, uid) = self.reader.MFRC522_Anticoll()
+                    if status == self.reader.MI_OK:
+                        uids = "0x" + "".join(format(x, '02x') for x in uid)
+                        print "RFID Detect:", uids      
+                        self.stop()
+                        self.callback(uids)
+            while not self.loop:
+                time.sleep(0.1)
 
     def start(self):
         print "RFID reader started"
         self.loop = True
-        thread.start_new_thread(self.read, ())
 
     def stop(self):
         print "RFID reader stopped"
