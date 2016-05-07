@@ -1,0 +1,25 @@
+{% extends "base.html"%}
+{% set title = "Kühlschränke" %}
+{% block content %}
+	{% if message %}
+		<div class="loggedin"> {{ message }} </div>
+	{% endif %}
+	<div>
+        {% for fridge in fridges %}
+        <div class="fridge">
+            <div class="fridge_top">
+                <h1>{{ fridge.name }}</h1>
+            </div>
+            <div class="fridge_bottom">
+                {% for sensor in fridge.sensors %}
+                <div class="fridge_sensor">
+                    {{ sensor.name }}<br>
+                    {% set fils = "log_%s.png" % sensor.id %}
+                    <img src="{{ url_for('static', filename=fils) }}" /><br>
+                </div>
+                {% endfor %}b
+            </div>
+        </div>
+        {% endfor %}
+	</div>
+{% endblock %}
