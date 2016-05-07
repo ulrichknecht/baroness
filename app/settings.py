@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ################################################################
 #                           Settings                           #
 ################################################################
@@ -15,6 +16,7 @@
 #
 ################################################################
 
+from fridge import Fridge, Sensor
 
 class Settings:
 
@@ -40,7 +42,30 @@ class Settings:
         self.annoyDays = 20         #Automatically send mails every x days (default 20)
         self.annoyLimit = 100       #Money limit for autoAnnoy (default 100)
 
+        ##Data Logging
+        #Fridge Temperature
+        self.fridgeLogging = False  #Log the fridge temperature (connect temp. sensors before enabling)
+        self.fridgeTime = 300       #Write fridge temp to file every x seconds
+        self.fridgeLength = 30      #Length of data log span in days
+
         ##Developer Settings
         self.debug = False          #Show debug output in console
+
+        ##Data Logging - Fridges
+        self.fridges = list()       #Do not edit
+
+        #Create an antialcoholic fridge (Antikühlschrank) with 3 sensors (top, middle and bottom temp.)
+        new_f = Fridge("Antikühlschrank")                      #make new fridge
+        new_f.add_sensor(Sensor("Temperatur Oben", "1"))       #add sensor 1 as top
+        new_f.add_sensor(Sensor("Temperatur Mitte", "2"))      #add sensor 2 as middle
+        new_f.add_sensor(Sensor("Temperatur Unten", "3"))      #add sensor 3 as bottom
+        self.fridges.append(new_f)                             #append to the list of fridges
+
+        #Create an alcoholic fridge with 3 sensors             #add more fridges as you like
+        new_f = Fridge("Bierkühlschrank")
+        new_f.add_sensor(Sensor("Temperatur Oben", "4"))
+        new_f.add_sensor(Sensor("Temperatur Mitte", "5"))
+        new_f.add_sensor(Sensor("Temperatur Unten", "6"))
+        self.fridges.append(new_f)
 
 settings = Settings()

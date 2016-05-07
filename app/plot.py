@@ -1,12 +1,16 @@
 #import matplotlib #speed?
 #matplotlib.use('GTKAgg')
+
 from matplotlib import pyplot as plt
+from matplotlib import units
 from matplotlib.dates import WeekdayLocator, DayLocator, HourLocator, DateFormatter, drange, MONDAY
 import numpy as np
 from user import User
 from database import *
 import multiprocessing as mp
-
+import pandas as pd
+import ipdb
+import logging
 
 def plot_all_thread(user=None):
     if user is not None:
@@ -21,20 +25,16 @@ def plot_all(user=None):
         plot_total(user)
     plot_total()
     plot_list(4)
-    print 'plot_all'
+    logging.info('plot_all')
 
 
 def plot_total(user=None):
-    print "start plot_total " + str(datetime.datetime.now())
-    print 'plot_total'
+    logging.info("start plot_total")
+
     today = datetime.date.today()
     delta = datetime.timedelta(days=1)
     begin = today - datetime.timedelta(weeks=2)
     dates = drange(begin, today + delta, delta)
-
-    #print begin
-    #print today
-    #print dates
 
     products = get_products()
     allconsumptions = [[0 for x in range(len(dates))] for product in products]
@@ -94,17 +94,84 @@ def plot_total(user=None):
         fils = "app/static/total%03d.png" % user.id
         fill = "app/static/total%03d_big.png" % user.id
     plt.title(tit)
-    print "plot plot_total " + str(datetime.datetime.now())
+    logging.info("plot plot_total " + str(datetime.datetime.now()))
     #480x320
     fig.set_size_inches(4.8, 3.2)
     plt.savefig(fils, dpi=100)
-    print "end plot_total " + str(datetime.datetime.now())
+    logging.info("end plot_total " + str(datetime.datetime.now()))
     #fig.set_size_inches(4.8, 3.2)
     #plt.savefig(fill, dpi=400)
 
 
+def plot_log(days, logfiles):
+    today = datetime.date.today()
+    delta = datetime.timedelta(days=1)
+    begin = today - datetime.timedelta(days=days)
+    dates = drange(begin, today + delta, delta)
+
+    #print begin
+    #print today
+    #print dates
+
+    #load all logfiles
+    data = None
+    for logfile in logfiles:
+        try:
+            d = pd.read_csv("app/static/testdata.csv", parse_dates=[0])
+            if data:
+                data = pd.concat((data, d))
+            else:
+                data = d
+        except:
+            logging.error("error while loading file " + logfile)
+            return 0
+
+    #ipdb.set_trace()
+    data = data.set_index(pd.DatetimeIndex(data.time))
+    data = data.drop("time", axis=1)
+    #ipdb.set_trace()
+    plt.xkcd()
+    #all columns
+    for item, frame in data.iteritems():
+        f = plt.figure()
+        #f.patch.set_facecolor("#ccefff")
+        #f.patch.set_alpha("0.0")
+        logging.debug("column " + str(item) + " " + frame.name)
+        plt.plot(data.index.to_pydatetime(), frame, "b")
+        ax = plt.gca()
+        #ax.grid(True, linewidth=1.0)
+        plt.xlim(begin, today)
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.yaxis.set_ticks_position('none')#('left')
+        ax.xaxis.set_ticks_position('none')#('bottom')
+
+        f.autofmt_xdate()
+
+        #plt.tick_params(which='minor', length=4)
+        #plt.tick_params(which='major', length=5)
+        #ipdb.set_trace()
+        ax.fmt_xdata = DateFormatter('%d.%m')
+        #ax.xaxis.set_major_locator(WeekdayLocator(MONDAY))
+        #ax.xaxis.set_major_locator(DayLocator())
+        ax.xaxis.set_major_formatter(DateFormatter('%d.%m'))
+
+
+        #plt.xlabel('Datum')
+        #plt.ylabel('Temperatur / C')
+        outfile = "app/static/log_" + str(item) + ".png"
+        logging.info("plot plot_total " + str(datetime.datetime.now()))
+        #480x320
+        plt.gcf().set_size_inches(5.3, 2.4)
+        plt.tight_layout()
+        plt.savefig(outfile, dpi=70, transparent=True, bbox_inches='tight')
+        plt.close()
+
+    logging.info("end plot_list " + str(datetime.datetime.now()))
+
+
 def plot_list(duration):
-    print "start plot_list " + str(datetime.datetime.now())
+    logging.info("start plot_list " + str(datetime.datetime.now()))
     today = datetime.datetime.today()
     begin = today - datetime.timedelta(weeks=duration)
 
@@ -180,11 +247,11 @@ def plot_list(duration):
 
     plt.title("Bierliste ("+ str(duration) + " Wochen)")
 
-    print "plot plot_list " + str(datetime.datetime.now())
+    logging.info("plot plot_list " + str(datetime.datetime.now()))
     #800x600
     fig.set_size_inches(15, 10)
     plt.savefig('app/static/bierliste_small.png', dpi=72, bbox_inches='tight')
     #1024x768
     #fig.set_size_inches(10.24, 7.68)
     #plt.savefig('app/static/bierliste.png', dpi=100)
-    print "end plot_list " + str(datetime.datetime.now())
+    logging.info("end plot_list " + str(datetime.datetime.now()))

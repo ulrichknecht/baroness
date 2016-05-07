@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from check_rights import *
 from flask import render_template, request, redirect, session, send_from_directory
 from app import app
 from database import *
 from plot import *
 from user import User
+from fridge import Fridge, Sensor
 from product import Product
 from send_email import send_email, send_emails
 from consumption import Consumption
@@ -60,6 +63,12 @@ def login():
 def logout():
     session.pop('name', None)
     return redirect('/')
+
+
+@app.route('/fridges')
+def fridges():
+    plot_log(30, ("static/testdata.csv",))
+    return render_template('fridges.html', fridges=settings.fridges, user=get_user_by_name(session.get('name')))
 
 
 @app.route('/manage_users')
@@ -179,10 +188,8 @@ def manage_beverages_edit(name=None):
             p.isshown = False
 
         pic = request.files['file']
-        print pic.filename
         if pic:
             extension = pic.filename.rsplit('.', 1)[1].lower()
-            print extension
             if extension == "png" or extension == "jpg":
                 pic.seek(0) # Move cursor back to beginning so we can write to disk
                 fpath = os.path.join("./app/static/", "product_%s.png" % p.name)
@@ -201,7 +208,7 @@ def manage_beverages_add():
     if request.method == 'POST':
         p = Product()
         error = None
-        print request
+        logging.info(request)
         p.name = request.form['name']
         #if request.form['price'].isnumeric():
         p.price = float(request.form['price'])
@@ -214,10 +221,10 @@ def manage_beverages_add():
             p.isshown = False
 
         pic = request.files['file']
-        print pic.filename
+        logging.info(pic.filename)
         if pic:
             extension = pic.filename.rsplit('.', 1)[1].lower()
-            print extension
+            logging.info(extension)
             if extension == "png" or extension == "jpg":
                 pic.seek(0) # Move cursor back to beginning so we can write to disk
                 fpath = os.path.join("./app/static/", "product_%s.png" % p.name)
@@ -277,7 +284,7 @@ def billing():
                 payment = float(request.form[formname])
                 if payment != 0:
                     add_deposit(user.name, payment)
-                print "%s payed %d" % (user.name, payment)
+                logging.info("%s payed %d" % (user.name, payment))
         debt = [0 for user in users]
         users = get_users()  # refresh users for correct viewing of autounblacking
         for user in users:
