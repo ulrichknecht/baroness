@@ -19,13 +19,11 @@ This is the todo file:
 * Improve design
 
 ## WEB-INTERFACE
-* Improve design
+* Improve design (???)
 
 ## BARON
-* Implement: Write a function that calculates money owed (per product?) for a user
 * Fix: Show money owed in the table containing the users
 * Implement: Generate a file containing users & money owed
-* Implement: The possibility to automatically send mails to users
 
 ## USERS
 * Implement: Show them a list of their consumptions
@@ -33,6 +31,4 @@ This is the todo file:
 * Implement: Give them a option to black-out themselves
 
 ## PLOTS
-* Implement: Generate plots in a seperate thread (may take some time with many consumptions)
 * Implement: Regerate plots if missing for some reason
-* Fix: Obey isshown flags for users and products in the plots

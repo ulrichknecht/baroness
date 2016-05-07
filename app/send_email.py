@@ -35,7 +35,7 @@ def send_emails(body, subject, users):
     FROM = 'bier1baroness@gmail.com'
 
     for user in users:
-        debt = get_debt(user.name)
+        debt = database.get_debt(user.name)
         subject_parsed = parse_email(subject, user, debt)
         body_parsed = parse_email(body, user, debt)
         send_email(user.email, subject_parsed, body_parsed)
