@@ -4,6 +4,8 @@
 
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=500">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 	<link rel="stylesheet" type="text/css" href="/static/style.css">
 	{% if title %}
 	<title> {{ title }} - Baroness </title>
@@ -17,6 +19,7 @@
 	<div class="tops">
 		<h1> {{ title }} - Baroness</h1>
 		<a href="/index"><div class="item">Home</div></a>
+		<a href="/fridges"><div class="item">Kühlschränke</div></a>
 		{% if user %}
 		<a href="/logout"><div class="item" style="float:right;">Logout</div></a>
 		<a href="/consume"><div class="item">Konsumieren</div></a>
