@@ -9,7 +9,6 @@ from user import User
 from database import *
 import multiprocessing as mp
 import pandas as pd
-import ipdb
 import logging
 
 def plot_all_thread(user=None):
