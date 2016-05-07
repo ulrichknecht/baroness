@@ -3,7 +3,7 @@ from flask import session, render_template
 from user import User
 from database import *
 from functools import wraps
-
+import logging
 
 def requires_baron(fn):
     @wraps(fn)

@@ -4,6 +4,7 @@ import database
 # from email.mime.text import MIMEText
 # from email.MIMEText import MIMEText
 import user
+import logging
 
 def send_email(recipient, subject, body):
     gmail_user = 'bier1baroness'
@@ -17,7 +18,7 @@ def send_email(recipient, subject, body):
     message = message.encode('utf-8')
 
     # message = msg.as_string()
-    print message
+    logging.info(message)
     try:
         server = smtplib.SMTP("smtp.gmail.com:587")
         #server.set_debuglevel(1)
@@ -25,10 +26,10 @@ def send_email(recipient, subject, body):
         server.login(gmail_user, gmail_pwd)
         server.sendmail(FROM, recipient, message)
         server.quit()
-        print 'Mail was sent to %s' % recipient
+        logging.info('Mail was sent to %s' % recipient)
 
     except:
-        print "Failed to send mail to %s" %recipient
+        logging.error("Failed to send mail to %s" %recipient)
 
 def send_emails(body, subject, users):
     FROM = 'bier1baroness@gmail.com'
@@ -38,9 +39,6 @@ def send_emails(body, subject, users):
         subject_parsed = parse_email(subject, user, debt)
         body_parsed = parse_email(body, user, debt)
         send_email(user.email, subject_parsed, body_parsed)
-
-
-
 
 def parse_email(text, u, dept):
 

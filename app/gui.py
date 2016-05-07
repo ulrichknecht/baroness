@@ -72,13 +72,13 @@ class MainWindow(wx.Frame):
             self.active = 4 #Sorry Bro
         else:
             self.active = 1 #Drinks
-        print "switching panels", self.active
+        logging.info("switching panels: " + str(self.active))
         #has to be called from main thread!!
         wx.CallAfter(self.switchPanels)
 
     def onProduct(self, e):
         self.active = 3
-        print self.user.longname + ' consumes'
+        logging.info(self.user.longname + ' consumes')
         self.drinkl = e.GetEventObject().GetLabelText()
         drink = get_product_by_name(self.drinkl.split('\n')[0]).id
         with app.app_context():
@@ -112,7 +112,7 @@ class MainWindow(wx.Frame):
             try:
                 self.panelThanks.bitmap_2.SetBitmap(wx.Bitmap("./app/static/product_%s.png" % self.drinkl.split('\n')[0], wx.BITMAP_TYPE_ANY))
             except:
-                print "no picture for drink:", self.drinkl.split('\n')
+                logging.error("no picture for drink: " + self.drinkl.split('\n')[0])
             self.panelThanks.Show()
             self.delayExit()
         elif active == 4:

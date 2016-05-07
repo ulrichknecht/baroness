@@ -1,16 +1,18 @@
 try:
     import MFRC522
 except:
-    print "ERROR: Need MFRC522 Library to read RFID tags, disable RFID if no reader is present!"
+    logging.critical("Need MFRC522 Library to read RFID tags, disable RFID if no reader is present!")
     exit()
 import signal
 import thread
 import time
+import logging
 
 
 class RFID:
 
     def __init__(self, callbackf):
+        logging.info("RFID Reader initialized!")
         self.reader = MFRC522.MFRC522()
         signal.signal(signal.SIGINT, self.stop)
         self.callback = callbackf
@@ -21,21 +23,21 @@ class RFID:
         while True:
             while self.loop:
                 (status, tagtype) = self.reader.MFRC522_Request(self.reader.PICC_REQIDL)
-                print "RFID Status:", status 
+                logging.debug("RFID Status: " + str(status))
                 if status == self.reader.MI_OK:
                     (status, uid) = self.reader.MFRC522_Anticoll()
                     if status == self.reader.MI_OK:
                         uids = "0x" + "".join(format(x, '02x') for x in uid)
-                        print "RFID Detect:", uids      
+                        logging.info("RFID Detect: " + uids)
                         self.stop()
                         self.callback(uids)
             while not self.loop:
                 time.sleep(0.1)
 
     def start(self):
-        print "RFID reader started"
+        logging.info("RFID reader started")
         self.loop = True
 
     def stop(self):
-        print "RFID reader stopped"
+        logging.info("RFID reader stopped")
         self.loop = False

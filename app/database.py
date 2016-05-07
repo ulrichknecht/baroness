@@ -8,6 +8,7 @@ from deposit import Deposit
 import random as rand
 import datetime
 from settings import settings
+import logging
 
 DATABASE = 'test/database.db'
 
@@ -28,13 +29,11 @@ def query_db(query, args=(), one=False):
     try:
         db = get_db()
     except RuntimeError:
-        print "GUI DB acces"
+        logging.info("GUI DB access")
         db = sqlite3.connect(DATABASE)
         closeflag = True
 
-    print query
-    print args
-    #print "Sqlite: " + query % args
+    logging.info("Database query: " + str(query) + " args: " + str(args))
     cur = db.execute(query, args)
     rows = cur.fetchall()
     cur.close()
@@ -58,7 +57,7 @@ def get_user(u):
     u.isbaron=row[7]
     u.isshown=row[8]
     u.autoblack=row[9]
-    print u
+    logging.info(u)
     return u
 
 def get_user_by_name(name):
@@ -76,7 +75,7 @@ def get_user_by_name(name):
     u.isbaron=row[7]
     u.isshown=row[8]
     u.autoblack=row[9]
-    print u
+    logging.debug(u)
     return u
 
 def get_user_by_rfid(rfidid):
@@ -94,7 +93,7 @@ def get_user_by_rfid(rfidid):
     u.isbaron=row[7]
     u.isshown=row[8]
     u.autoblack=row[9]
-    print u
+    logging.debug(u)
     return u
 
 def get_users():
@@ -196,8 +195,7 @@ def get_consumed(user=None, startdate=None, enddate=None):
 def add_consume(username, productid):
 
     consumerid = query_db("SELECT ID FROM USERS WHERE NAME = ?", [username], one=True)
-    print "consumerid = "
-    print consumerid
+    logging.info("consumerid = " + str(consumerid))
     consumerid = int(consumerid[0])
     product = get_product_by_id(productid)
     #INSERT INTO USERS (NAME, PASSWORD, LONGNAME, EMAIL, RFID_ID) VALUES (? ,? ,?, ?, ?)", (u.name, u.password, u.longname, u.email, u.rfid_id))
@@ -209,7 +207,7 @@ def add_consume(username, productid):
             u = get_user_by_name(username)
             u.isblack = True
             update_user(u)
-    print "consumed"
+    logging.info("consumed")
 
     return
 
@@ -256,7 +254,7 @@ def add_deposit(username, amount):
             u = get_user_by_name(username)
             u.isblack = False
             update_user(u)
-    print "deposit"
+    logging.info("deposit")
 
     return
 
@@ -286,7 +284,7 @@ def generate_test_consumptions():
         p = 1 + int(rand.random() * (1.0*num_p))
         daysa = int(rand.random() * (30.0))
         add_test_consume(u,p,daysa)
-    print 'trying to add ' +  str(p) + ' to ' + str(u)
+    logging.info('trying to add ' +  str(p) + ' to ' + str(u))
     return
 
 def add_test_consume(consumerid, productid, daysago):
