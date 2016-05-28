@@ -52,11 +52,11 @@ def get_user(u):
     u.password=row[2]
     u.longname=row[3]
     u.email=row[4]
-    u.rfid_id=row[5]
     u.isblack=row[6]
     u.isbaron=row[7]
     u.isshown=row[8]
     u.autoblack=row[9]
+    u.rfid_id = get_rfid_ids_by_userid(u.id)
     logging.info(u)
     return u
 
@@ -70,29 +70,37 @@ def get_user_by_name(name):
     u.password=row[2]
     u.longname=row[3]
     u.email=row[4]
-    u.rfid_id=row[5]
     u.isblack=row[6]
     u.isbaron=row[7]
     u.isshown=row[8]
     u.autoblack=row[9]
     logging.debug(u)
+    u.rfid_id = get_rfid_ids_by_userid(u.id)
     return u
 
-def get_user_by_rfid(rfidid):
-    row = query_db("SELECT * FROM USERS WHERE RFID_ID = ?", [rfidid], one=True)
+def get_user_by_id(id):
+    row = query_db("SELECT * FROM USERS WHERE ID = ?", [id], one=True)
     u = User()
     if row is None:
-         return None
+        return None
     u.id=row[0]
     u.name=row[1]
     u.password=row[2]
     u.longname=row[3]
     u.email=row[4]
-    u.rfid_id=row[5]
     u.isblack=row[6]
     u.isbaron=row[7]
     u.isshown=row[8]
     u.autoblack=row[9]
+    u.rfid_id = get_rfid_ids_by_userid(u.id)
+    logging.debug(u)
+    return u
+
+def get_user_by_rfid(rfidid):
+    row = query_db("SELECT * FROM rfid WHERE RFID_ID = ?", [rfidid], one=True)
+    if row is None:
+         return None
+    u = get_user_by_id(row[1])
     logging.debug(u)
     return u
 
@@ -106,23 +114,49 @@ def get_users():
         u.password=row[2]
         u.longname=row[3]
         u.email=row[4]
-        u.rfid_id=row[5]
         u.isblack=row[6]
         u.isbaron=row[7]
         u.isshown=row[8]
         u.autoblack=row[9]
+        u.rfid_id = get_rfid_ids_by_userid(u.id)
         users.append(u)
     return users
 
 
 def add_user(u):
-    query_db("INSERT INTO USERS (NAME, PASSWORD, LONGNAME, EMAIL, RFID_ID) VALUES (? ,? ,?, ?, ?)", (u.name, u.password, u.longname, u.email, u.rfid_id))
+    query_db("INSERT INTO USERS (NAME, PASSWORD, LONGNAME, EMAIL) VALUES (? ,? ,?, ?)", (u.name, u.password, u.longname, u.email))
+    user_id = get_user_by_name(u.name).id
+    set_rfid_to_userid(u.rfid_id, user_id)
     get_db().commit()
 
+def get_rfid_ids_by_userid(user_id):
+    rows = query_db("SELECT * FROM Rfid WHERE userid = ?", [user_id])
+    rfid_ids = []
+    for row in rows:
+        rfid_ids.append(row[2])
+    return rfid_ids
+
+def set_rfid_to_userid(rfid_ids, user_id):
+    new_rfids = rfid_ids.replace(" ","").split(";")
+
+    for rfid_id in new_rfids: # add new rfid_ids
+        u = get_user_by_rfid(rfid_id)
+        if not u: #rfid id is not assigned to a user, so it should be added
+             add_rfid_id(rfid_id, user_id)
+
+    for old_rfid in get_rfid_ids_by_userid(user_id):
+        if old_rfid not in new_rfids:
+            query_db("DELETE FROM Rfid WHERE rfid_id = ?", (old_rfid, ))
+
+
+def add_rfid_id(rfid_id, userid):
+    rfid_id = rfid_id.lower();
+    query_db("INSERT INTO Rfid (userid, rfid_id) values (?, ?)", (userid, rfid_id))
 
 def update_user(u):
     #query_db("UPDATE users SET (NAME, LONGNAME, EMAIL, RFID_ID, ISBLACK, ISBARON, ISSHOWN) VALUES (?, ?, ?, ?, ?, ?, ?) WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
-    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, RFID_ID=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=? WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.autoblack, u.id))
+    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=? WHERE ID=?", (u.name, u.longname, u.email, u.isblack, u.isbaron, u.isshown, u.autoblack, u.id))
+    set_rfid_to_userid(u.rfid_id, u.id)
     get_db().commit()
 
 

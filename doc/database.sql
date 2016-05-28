@@ -75,6 +75,16 @@ CREATE TABLE Deposits(
     FOREIGN KEY(userid) REFERENCES USERS(id)
 );
 
+CREATE TABLE Rfid(
+    di INTEGER PRIMARY KEY,
+    userid INTEGER NOT NULL,
+    rfid_id TEXT,
+    is_valid BOOLEAN DEFAULT 1,
+
+    FOREIGN KEY(userid) REFERENCES USERS(id)
+);
+
+
 -- The table Config stores basic config data, this is for the admins and the barons
 
 
