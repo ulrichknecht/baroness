@@ -5,6 +5,9 @@ from os import urandom
 from app import gui
 import thread
 import logging
+from app import settings
+from app import datalog
+from app import plot
 
 if __name__ == '__main__':
 
@@ -15,6 +18,12 @@ if __name__ == '__main__':
     logging.info("Baroness started!")
     print "Baroness started: logging to ", logfile
 
+    #start data logging
+    if settings.settings.fridgeLogging:
+        logger = datalog.DataLogger()
+
+    #start plot thread
+    plotter = plot.Plotter()
 
     #start gui
     wx = wx.App()

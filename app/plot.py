@@ -8,8 +8,51 @@ import numpy as np
 from user import User
 from database import *
 import multiprocessing as mp
+import thread
 import pandas as pd
 import logging
+import time
+import glob
+
+
+class Plotter:
+
+    def __init__(self):
+        logging.info("Plotter started!")
+        self.joblist = list()
+        self.active = True
+        thread.start_new_thread(self.refresh, ())
+
+    def refresh(self):
+        ptime = 0
+        while self.active:
+            logging.info("Plotter plotting stuff")
+
+            logfiles = list()
+            logfiles += glob.glob("static/logdata*.csv")
+            logfiles.append("/tmp/baroness_logdata_fast.csv")
+            if logfiles:
+                plot_log(logfiles, hours = 2)
+
+            # plotter not fully integrated yet
+            #if ptime % 30 or self.joblist:
+            #    plot_total()
+            #    plot_list(4)
+            #    for u in self.joblist:
+            #        plot_total(u)
+            #    self.joblist = list()
+
+            ptime += 1
+            time.sleep(10)
+
+    def addplot(self, user):
+        logging.info("Plotter add user " + user.name)
+        self.joblist.append(user)
+
+    def stop(self):
+        logging.info("Plotter stop!")
+        self.active = False
+
 
 def plot_all_thread(user=None):
     if user is not None:
@@ -102,21 +145,15 @@ def plot_total(user=None):
     #plt.savefig(fill, dpi=400)
 
 
-def plot_log(days, logfiles):
-    today = datetime.date.today()
-    delta = datetime.timedelta(days=1)
-    begin = today - datetime.timedelta(days=days)
-    dates = drange(begin, today + delta, delta)
-
-    #print begin
-    #print today
-    #print dates
+def plot_log(logfiles, hours):
+    end = datetime.datetime.now()
+    begin = end - datetime.timedelta(hours=hours)
 
     #load all logfiles
     data = None
     for logfile in logfiles:
         try:
-            d = pd.read_csv("app/static/testdata.csv", parse_dates=[0])
+            d = pd.read_csv(logfile, parse_dates=[0])
             if data:
                 data = pd.concat((data, d))
             else:
@@ -139,7 +176,7 @@ def plot_log(days, logfiles):
         plt.plot(data.index.to_pydatetime(), frame, "b")
         ax = plt.gca()
         #ax.grid(True, linewidth=1.0)
-        plt.xlim(begin, today)
+        plt.xlim(begin, end)
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
         ax.yaxis.set_ticks_position('none')#('left')
@@ -159,20 +196,20 @@ def plot_log(days, logfiles):
         #plt.xlabel('Datum')
         #plt.ylabel('Temperatur / C')
         outfile = "app/static/log_" + str(item) + ".png"
-        logging.info("plot plot_total " + str(datetime.datetime.now()))
+        logging.info("Plot plot_log " + str(datetime.datetime.now()))
         #480x320
         plt.gcf().set_size_inches(5.3, 2.4)
         plt.tight_layout()
         plt.savefig(outfile, dpi=70, transparent=True, bbox_inches='tight')
         plt.close()
 
-    logging.info("end plot_list " + str(datetime.datetime.now()))
+    logging.info("Plot: End plot_log " + str(datetime.datetime.now()))
 
 
 def plot_list(duration):
-    logging.info("start plot_list " + str(datetime.datetime.now()))
-    today = datetime.datetime.today()
-    begin = today - datetime.timedelta(weeks=duration)
+    logging.info("Plot: Start plot_list " + str(datetime.datetime.now()))
+    end = datetime.datetime.now()
+    begin = end - datetime.timedelta(weeks=duration)
 
     users = get_users()
     products = get_products()
@@ -246,11 +283,11 @@ def plot_list(duration):
 
     plt.title("Bierliste ("+ str(duration) + " Wochen)")
 
-    logging.info("plot plot_list " + str(datetime.datetime.now()))
+    logging.info("Plot plot_list " + str(datetime.datetime.now()))
     #800x600
     fig.set_size_inches(15, 10)
     plt.savefig('app/static/bierliste_small.png', dpi=72, bbox_inches='tight')
     #1024x768
     #fig.set_size_inches(10.24, 7.68)
     #plt.savefig('app/static/bierliste.png', dpi=100)
-    logging.info("end plot_list " + str(datetime.datetime.now()))
+    logging.info("Plot End plot_list " + str(datetime.datetime.now()))
