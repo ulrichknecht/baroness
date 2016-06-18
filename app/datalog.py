@@ -69,16 +69,22 @@ class DataLogger:
             for i in range(SENSOR_BASEID, SENSOR_BASEID + 8):
                 (count, data) = self.ioif.bb_i2c_zip(P_SDA, [I2C_SET_ADDR, i, I2C_START, I2C_READ, SENSOR_DATALEN, I2C_STOP, I2C_END])
                 columns.append(str(i))
-                if count > 0:
-                    data_fast[i-SENSOR_BASEID] += int(data[0]) + int(data[1]) / 256.0
-                    data_perm[i-SENSOR_BASEID] += int(data[0]) + int(data[1]) / 256.0
+                if count > 1:
+		    sign = 1
+                    if data[0] > 128:
+                        print "sign"
+                        data[0] = data[0]-128
+                        sign = -1
+                    data_fast[i-SENSOR_BASEID] += sign * (int(data[0]) + (int(data[1]) / 256.0))
+                    data_perm[i-SENSOR_BASEID] += sign * (int(data[0]) + (int(data[1]) / 256.0))
                 else:
                     data_fast[i-SENSOR_BASEID] = np.nan
                     data_perm[i-SENSOR_BASEID] = np.nan
+                time.sleep(0.05)
 
             infoline = np.empty((1, 9), dtype=object)
 
-            if n_fast % 2 == 0:
+            if n_fast % 10 == 0:
                 infoline[0, 1:9] = data_fast[0:8] / n_fast
                 n_fast = 0
                 infoline[0, 0] = dt.datetime.now()
@@ -86,7 +92,7 @@ class DataLogger:
                 self.savetofile(False, pdataline)
                 data_fast = np.zeros(8)
 
-            if n_perm % 120 == 0:
+            if n_perm % 100 == 0:
                 infoline[0, 1:9] = data_perm[0:8] / n_perm
                 n_perm = 0
                 infoline[0, 0] = dt.datetime.now()
@@ -96,7 +102,7 @@ class DataLogger:
 
             n_fast += 1
             n_perm += 1
-            time.sleep(0.5)
+            
 
     def savetofile(self, permanent, data):
 
@@ -104,7 +110,7 @@ class DataLogger:
             date = dt.datetime.now().strftime('%Y%m%d')
             exists = os.path.isfile('app/static/logdata_' + date + '.csv')
             with open('app/static/logdata_' + date + '.csv', 'a+') as f:
-                data.to_csv(f, header=False, index=False)
+                data.to_csv(f, header=not exists, index=False)
         else:
             exists = os.path.isfile('/tmp/baroness_logdata_fast.csv')
             with open('/tmp/baroness_logdata_fast.csv', 'a+') as f:

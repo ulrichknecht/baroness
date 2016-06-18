@@ -1,9 +1,11 @@
-#import matplotlib #speed?
-#matplotlib.use('GTKAgg')
+import matplotlib #speed?
+matplotlib.use('TkAgg')
 
 from matplotlib import pyplot as plt
 from matplotlib import units
+from matplotlib import patheffects
 from matplotlib.dates import WeekdayLocator, DayLocator, HourLocator, DateFormatter, drange, MONDAY
+from matplotlib import rcParams as rcp
 import numpy as np
 from user import User
 from database import *
@@ -27,12 +29,12 @@ class Plotter:
         ptime = 0
         while self.active:
             logging.info("Plotter plotting stuff")
-
             logfiles = list()
-            logfiles += glob.glob("static/logdata*.csv")
+            logfiles += glob.glob("app/static/logdata*.csv")
             logfiles.append("/tmp/baroness_logdata_fast.csv")
+            print logfiles
             if logfiles:
-                plot_log(logfiles, hours = 2)
+                plot_log(logfiles, hours = 4)
 
             # plotter not fully integrated yet
             #if ptime % 30 or self.joblist:
@@ -136,11 +138,11 @@ def plot_total(user=None):
         fils = "app/static/total%03d.png" % user.id
         fill = "app/static/total%03d_big.png" % user.id
     plt.title(tit)
-    logging.info("plot plot_total " + str(datetime.datetime.now()))
+    logging.info("Plot plot_total " + str(datetime.datetime.now()))
     #480x320
     fig.set_size_inches(4.8, 3.2)
     plt.savefig(fils, dpi=100)
-    logging.info("end plot_total " + str(datetime.datetime.now()))
+    logging.info("Plot: End plot_total " + str(datetime.datetime.now()))
     #fig.set_size_inches(4.8, 3.2)
     #plt.savefig(fill, dpi=400)
 
@@ -154,7 +156,7 @@ def plot_log(logfiles, hours):
     for logfile in logfiles:
         try:
             d = pd.read_csv(logfile, parse_dates=[0])
-            if data:
+            if data is not None:
                 data = pd.concat((data, d))
             else:
                 data = d
@@ -163,36 +165,43 @@ def plot_log(logfiles, hours):
             return 0
 
     #ipdb.set_trace()
+    data = data.sort('time')
+    data = data[data.time > begin]
     data = data.set_index(pd.DatetimeIndex(data.time))
     data = data.drop("time", axis=1)
     #ipdb.set_trace()
     plt.xkcd()
+    rcp['path.effects'] = [patheffects.withStroke(linewidth=0)]
     #all columns
+      
     for item, frame in data.iteritems():
+        if frame is None or frame.empty or frame.isnull().values.all():
+            continue
         f = plt.figure()
         #f.patch.set_facecolor("#ccefff")
         #f.patch.set_alpha("0.0")
         logging.debug("column " + str(item) + " " + frame.name)
-        plt.plot(data.index.to_pydatetime(), frame, "b")
+        plt.plot(data.index.to_pydatetime(), frame)#"b"
         ax = plt.gca()
         #ax.grid(True, linewidth=1.0)
-        plt.xlim(begin, end)
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
+        #plt.xlim(begin, end)
+        #ax.spines['right'].set_visible(False)
+        #ax.spines['top'].set_visible(False)
         ax.yaxis.set_ticks_position('none')#('left')
         ax.xaxis.set_ticks_position('none')#('bottom')
 
-        f.autofmt_xdate()
-
-        #plt.tick_params(which='minor', length=4)
-        #plt.tick_params(which='major', length=5)
-        #ipdb.set_trace()
-        ax.fmt_xdata = DateFormatter('%d.%m')
-        #ax.xaxis.set_major_locator(WeekdayLocator(MONDAY))
-        #ax.xaxis.set_major_locator(DayLocator())
-        ax.xaxis.set_major_formatter(DateFormatter('%d.%m'))
-
-
+        try: #might not work if few data available
+	    f.autofmt_xdate()
+            #plt.tick_params(which='minor', length=4)
+            #plt.tick_params(which='major', length=5)
+            #ipdb.set_trace()
+            #ax.fmt_xdata = AutoDateFormatter('%d.%m/%H')
+            #ax.xaxis.set_major_locator(WeekdayLocator(MONDAY))
+   	    ax.xaxis.set_major_locator(AutoDateLocator())
+            ax.xaxis.set_major_formatter(AutoDateFormatter(defaultfmt='%d.%m'))
+            #f.autofmt_xdate()
+        except:
+            logging.warning("Plot: Few data!")
         #plt.xlabel('Datum')
         #plt.ylabel('Temperatur / C')
         outfile = "app/static/log_" + str(item) + ".png"
@@ -290,4 +299,4 @@ def plot_list(duration):
     #1024x768
     #fig.set_size_inches(10.24, 7.68)
     #plt.savefig('app/static/bierliste.png', dpi=100)
-    logging.info("Plot End plot_list " + str(datetime.datetime.now()))
+    logging.info("Plot: End plot_list " + str(datetime.datetime.now()))
