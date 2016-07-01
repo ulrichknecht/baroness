@@ -149,6 +149,10 @@ def manage_users_edit(name=None):
         else:
             u.autoblack = False
 
+        if 'onlyrfid' in request.form:
+            u.onlyrfid = True
+        else:
+            u.onlyrfid = False
 
         update_user(u)
 

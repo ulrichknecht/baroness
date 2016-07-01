@@ -18,6 +18,7 @@
 		Baron: <input type="checkbox" name="isbaron" {% if user_to_edit.isbaron %} checked {% endif %} /> <br>
 		Angezeigt: <input type="checkbox" name="isshown" {% if user_to_edit.isshown %} checked {% endif %} /><br>
 		Auto-Schwärzen: <input type="checkbox" name="autoblack" {% if user_to_edit.autoblack %} checked {% endif %} /><br>
+		Nur mit RFID Kreuzen: <input type="checkbox" name="onlyrfid" {% if user_to_edit.onlyrfid %} checked {% endif %} /><br>
 		<input type="submit" value="Übernehmen" />
 	</form>
 	{% endif %}

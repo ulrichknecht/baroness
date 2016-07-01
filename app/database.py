@@ -52,10 +52,11 @@ def get_user(u):
     u.password=row[2]
     u.longname=row[3]
     u.email=row[4]
-    u.isblack=row[6]
-    u.isbaron=row[7]
-    u.isshown=row[8]
-    u.autoblack=row[9]
+    u.isblack=row[5]
+    u.isbaron=row[6]
+    u.isshown=row[7]
+    u.autoblack=row[8]
+    u.onlyrfid=row[9]
     u.rfid_id = get_rfid_ids_by_userid(u.id)
     logging.info(u)
     return u
@@ -70,10 +71,11 @@ def get_user_by_name(name):
     u.password=row[2]
     u.longname=row[3]
     u.email=row[4]
-    u.isblack=row[6]
-    u.isbaron=row[7]
-    u.isshown=row[8]
-    u.autoblack=row[9]
+    u.isblack=row[5]
+    u.isbaron=row[6]
+    u.isshown=row[7]
+    u.autoblack=row[8]
+    u.onlyrfid=row[9]
     logging.debug(u)
     u.rfid_id = get_rfid_ids_by_userid(u.id)
     return u
@@ -88,10 +90,11 @@ def get_user_by_id(id):
     u.password=row[2]
     u.longname=row[3]
     u.email=row[4]
-    u.isblack=row[6]
-    u.isbaron=row[7]
-    u.isshown=row[8]
-    u.autoblack=row[9]
+    u.isblack=row[5]
+    u.isbaron=row[6]
+    u.isshown=row[7]
+    u.autoblack=row[8]
+    u.onlyrfid=row[9]
     u.rfid_id = get_rfid_ids_by_userid(u.id)
     logging.debug(u)
     return u
@@ -114,10 +117,11 @@ def get_users():
         u.password=row[2]
         u.longname=row[3]
         u.email=row[4]
-        u.isblack=row[6]
-        u.isbaron=row[7]
-        u.isshown=row[8]
-        u.autoblack=row[9]
+        u.isblack=row[5]
+        u.isbaron=row[6]
+        u.isshown=row[7]
+        u.autoblack=row[8]
+        u.onlyrfid=row[9]
         u.rfid_id = get_rfid_ids_by_userid(u.id)
         users.append(u)
     return users
@@ -155,7 +159,7 @@ def add_rfid_id(rfid_id, userid):
 
 def update_user(u):
     #query_db("UPDATE users SET (NAME, LONGNAME, EMAIL, RFID_ID, ISBLACK, ISBARON, ISSHOWN) VALUES (?, ?, ?, ?, ?, ?, ?) WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
-    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=? WHERE ID=?", (u.name, u.longname, u.email, u.isblack, u.isbaron, u.isshown, u.autoblack, u.id))
+    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=?, ONLYRFID=? WHERE ID=?", (u.name, u.longname, u.email, u.isblack, u.isbaron, u.isshown, u.autoblack, u.onlyrfid ,u.id))
     set_rfid_to_userid(u.rfid_id, u.id)
     get_db().commit()
 

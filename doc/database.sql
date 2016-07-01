@@ -36,11 +36,11 @@ CREATE TABLE Users(
 	password TEXT NOT NULL,
 	longname TEXT NOT NULL,
 	email TEXT,
-	rfid_id TEXT,
 	isblack BOOLEAN DEFAULT 0,
 	isbaron BOOLEAN DEFAULT 0,
 	isshown BOOLEAN DEFAULT 1,
-	autoblack BOOLEAN DEFAULT 1
+	autoblack BOOLEAN DEFAULT 1,
+	onlyrfid BOOLEAN DEFAULT 0
 );
 
 -- The table PRODUCTS contains information about the beverages available
@@ -76,13 +76,18 @@ CREATE TABLE Deposits(
 );
 
 CREATE TABLE Rfid(
-    di INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     userid INTEGER NOT NULL,
     rfid_id TEXT,
     is_valid BOOLEAN DEFAULT 1,
 
     FOREIGN KEY(userid) REFERENCES USERS(id)
 );
+
+
+-- add one baron to login
+INSERT INTO Users(name, password, longname, email, rfid_id, isblack, isbaron, isshown, onlyrfid) VALUES
+	(hindenburg, $2a$12$BGj0f9msFZiYqAN2DfKOme3lk1klMz1ea62IYNtLWz4q.zNXM0oR2, Paul von Hindenburg, hind@enburg.er, 0x6666666666, 0, 1, 1, 1, 0);
 
 
 -- The table Config stores basic config data, this is for the admins and the barons
