@@ -1,3 +1,4 @@
+import logging
 try:
     import MFRC522
 except:
@@ -6,14 +7,13 @@ except:
 import signal
 import thread
 import time
-import logging
 
 
 class RFID:
 
     def __init__(self, callbackf):
         logging.info("RFID Reader initialized!")
-        self.reader = MFRC522.MFRC522()
+        self.reader = MFRC522.MFRC522(spd=500000)
         signal.signal(signal.SIGINT, self.stop)
         self.callback = callbackf
         self.loop = True
