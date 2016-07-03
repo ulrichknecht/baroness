@@ -7,6 +7,7 @@ import signal
 import thread
 import logging
 import atexit
+import settings
 import os
 
 # i2c io pins
@@ -25,11 +26,12 @@ I2C_STOP     = 3
 I2C_SET_ADDR = 4
 I2C_READ     = 6
 
-try:
-    import pigpio
-except:
-    logging.fatal("PIGPIO library could not be loaded, install PIGPIO to read sensor data or disable data logging in the settings!")
-    exit()
+if settings.settings.fridgeLogging:
+    try:
+        import pigpio
+    except:
+        logging.fatal("PIGPIO library could not be loaded, install PIGPIO to read sensor data or disable data logging in the settings!")
+        exit()
 
 
 class DataLogger:
