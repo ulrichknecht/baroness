@@ -116,7 +116,7 @@ def plot_log(days, logfiles):
     data = None
     for logfile in logfiles:
         try:
-            d = pd.read_csv("app/static/testdata.csv", parse_dates=[0])
+            d = pd.read_csv(logfile, parse_dates=[0])
             if data:
                 data = pd.concat((data, d))
             else:
@@ -139,7 +139,7 @@ def plot_log(days, logfiles):
         plt.plot(data.index.to_pydatetime(), frame, "b")
         ax = plt.gca()
         #ax.grid(True, linewidth=1.0)
-        plt.xlim(begin, today)
+        plt.xlim(begin, datetime.datetime.now())
         ax.spines['right'].set_visible(False)
         ax.spines['top'].set_visible(False)
         ax.yaxis.set_ticks_position('none')#('left')

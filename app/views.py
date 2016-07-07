@@ -67,7 +67,7 @@ def logout():
 
 @app.route('/fridges')
 def fridges():
-    plot_log(30, ("static/testdata.csv",))
+    plot_log(30, ("/tmp/baroness_logdata_fast.csv",))
     return render_template('fridges.html', fridges=settings.fridges, user=get_user_by_name(session.get('name')))
 
 
