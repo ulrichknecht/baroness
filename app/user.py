@@ -11,6 +11,7 @@ class User:
         self.isbaron=False
         self.isshown=False
         self.autoblack=False
+        self.onlyrfid=False
 
 
     def __str__(self):
@@ -72,7 +73,15 @@ class User:
         if self.autoblack is None:
             s = "%s, None" % s
         else:
-            if self.isshown is 0 or self. isshown is False:
+            if self.autoblack is 0 or self. autoblack is False:
+                s = "%s, False" % s
+            else:
+                s = "%s, True" % s
+
+        if self.onlyrfid is None:
+            s = "%s, None" % s
+        else:
+            if self.onlyrfid is 0 or self. onlyrfid is False:
                 s = "%s, False" % s
             else:
                 s = "%s, True" % s

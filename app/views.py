@@ -67,7 +67,6 @@ def logout():
 
 @app.route('/fridges')
 def fridges():
-    plot_log(30, ("/tmp/baroness_logdata_fast.csv",))
     return render_template('fridges.html', fridges=settings.fridges, user=get_user_by_name(session.get('name')))
 
 
@@ -149,6 +148,10 @@ def manage_users_edit(name=None):
         else:
             u.autoblack = False
 
+        if 'onlyrfid' in request.form:
+            u.onlyrfid = True
+        else:
+            u.onlyrfid = False
 
         update_user(u)
 

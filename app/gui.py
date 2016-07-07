@@ -231,7 +231,7 @@ class PanelUsers (wx.Panel):
         users = get_users()
         names = list()
         for user in users:
-            if user.isshown:
+            if user.isshown and not user.onlyrfid:
                 names.append(user.longname)
 
         self.but_names = list()
