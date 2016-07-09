@@ -153,6 +153,9 @@ def manage_users_edit(name=None):
         else:
             u.onlyrfid = False
 
+        u2 = get_user_by_id(u.id)
+        u.password = u2.password
+
         update_user(u)
 
         return redirect('/manage_users')
@@ -344,6 +347,44 @@ def send_mass_mail(name=None):
     if request.method == 'GET':
         return render_template('billing_mass_mail.html', user=get_user_by_name(session.get('name')))
 
+
+@app.route('/selfmanagement', methods=['GET', 'POST'])
+@requires_login
+def selfmanagement():
+    if request.method == 'POST':
+        u = get_user_by_name(session.get('name'))
+        if not bcrypt.checkpw(request.form['password_old'], u.password):
+            success = "Passwort falsch!"
+        else:
+            if ('password1' in request.form) & ('password2' in request.form):
+                if request.form['password1'] == request.form['password2']:
+                    u.password = bcrypt.hashpw(request.form['password1'], bcrypt.gensalt())
+
+                    u.rfid_id = request.form['rfid_id']
+
+                    if 'onlyrfid' in request.form:
+                        u.onlyrfid = True
+                    else:
+                        u.onlyrfid = False
+                    update_user(u)
+                    success = u'Einstellungen wurden übernommen!'
+                else:
+                    success = u'Neue Passwörter stimmen nicht überein!'
+            else:
+                u.rfid_id = request.form['rfid_id']
+
+                if 'onlyrfid' in request.form:
+                    u.onlyrfid = True
+                else:
+                    u.onlyrfid = False
+
+                update_user(u)
+                success = u'Einstellungen wurden übernommen!'
+
+        return render_template('selfmanagement.html', success=success, user=get_user_by_name(session.get('name')))
+
+    if request.method == 'GET':
+        return render_template('selfmanagement.html', user=get_user_by_name(session.get('name')))
 
 #migrate the db to hashed passwords
 #@app.route('/hashdb')

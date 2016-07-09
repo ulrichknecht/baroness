@@ -160,7 +160,7 @@ def add_rfid_id(rfid_id, userid):
 
 def update_user(u):
     #query_db("UPDATE users SET (NAME, LONGNAME, EMAIL, RFID_ID, ISBLACK, ISBARON, ISSHOWN) VALUES (?, ?, ?, ?, ?, ?, ?) WHERE ID=?", (u.name, u.longname, u.email, u.rfid_id, u.isblack, u.isbaron, u.isshown, u.id))
-    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=?, ONLYRFID=? WHERE ID=?", (u.name, u.longname, u.email, u.isblack, u.isbaron, u.isshown, u.autoblack, u.onlyrfid ,u.id))
+    query_db("UPDATE users SET NAME=?, LONGNAME=?, EMAIL=?, PASSWORD=?, ISBLACK=?, ISBARON=?, ISSHOWN=?, AUTOBLACK=?, ONLYRFID=? WHERE ID=?", (u.name, u.longname, u.email, u.password, u.isblack, u.isbaron, u.isshown, u.autoblack, u.onlyrfid ,u.id))
     set_rfid_to_userid(u.rfid_id, u.id)
     get_db().commit()
 

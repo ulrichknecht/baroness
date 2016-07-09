@@ -1,0 +1,24 @@
+{% extends "base.html"%}
+{% set title = "Konsumentenverwaltung" %}
+{% block content %}
+	<h1> Einstellungen ändern </h1>
+		{% if success %}
+		<p>{{ success }}</p>
+		{% endif %}
+	<form name="user" method="post" action="/selfmanagement">
+		Die Euml ID wird angezeigt wenn du ein unbekanntes RFID Tag an den RFID reader hältst.
+		<br>Euml ID (falls mehrere durch ; trennen):<br><input type="text" name=rfid_id value="{{ user.rfid_id }}"><br>
+		<br>
+		Falls du nicht in der Liste am touchscreen angezeigt werden willst, musst du hier ein Kreuz setzen.
+		<br>Nur RFID-kreuzen <input type="checkbox" name="onlyrfid" {% if user.onlyrfid %} checked {% endif %} /><br>
+
+		<br>
+		Falls du ein neues Passwort eingibts wird dieses geändert.
+		Neues Passwort:<br><input type="password" name=password1 placeholder="Password"><br>
+		Neues Passwort wiederholen:<br><input type="password" name=password2 placeholder="Password"><br>
+		<br>
+		Du musst für jede Änderung dein aktuelles Passwort eingeben.
+		Neues Passwort wiederholen:<br><input type="password" name=password_old required placeholder="Password"><br>
+		<input type="submit" value="Hinzufügen">
+	</form>
+{% endblock %}
