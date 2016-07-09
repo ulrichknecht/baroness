@@ -22,7 +22,7 @@
 			<td>{{user.name}}</td>
 			<td>{{user.longname}}</td>
 			<td>{{user.email}}</td>
-			<td>{% if user.rfid_id %} {% for rfid_id in user.rfid_id %} {{rfid_id}};{% endfor %} {% endif %}</td>
+			<td>{{user.rfid_id}}</td>
 			<td>{% if user.isblack %} &#9745; {% else %} &#9744; {% endif %} </td>
 			<td>{% if user.isbaron %} &#9745; {% else %} &#9744; {% endif %} </td>
 			<td>{% if user.isshown %} &#9745; {% else %} &#9744; {% endif %} </td>

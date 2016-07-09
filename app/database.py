@@ -138,7 +138,8 @@ def get_rfid_ids_by_userid(user_id):
     rfid_ids = []
     for row in rows:
         rfid_ids.append(row[2])
-    return rfid_ids
+
+    return ";".join(rfid_ids)
 
 def set_rfid_to_userid(rfid_ids, user_id):
     new_rfids = rfid_ids.replace(" ","").split(";")

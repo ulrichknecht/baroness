@@ -13,7 +13,7 @@
 		Username:<br><input type="text" name="username" required value="{{user_to_edit.name}}" /> <br>
 		Name:<br><input type="text" name="longname" required value="{{user_to_edit.longname}}" /><br>
 		Email:<br><input type="email" name="email" required value="{{user_to_edit.email}}" /><br>
-		Euml ID: (falls mehrere durch ; trennen)<br><input type="text" name="rfid_id" value="{% if user_to_edit.rfid_id %}{% for rfid_id in user_to_edit.rfid_id %}{{rfid_id}};{% endfor %}{% endif %}" /><br>
+		Euml ID: (falls mehrere durch ; trennen)<br><input type="text" name="rfid_id" value="{{user_to_edit.rfid_id}}" /><br>
 		Geschwärzt: <input type="checkbox" name="isblack"  {% if user_to_edit.isblack %} checked {% endif %} /> <br>
 		Baron: <input type="checkbox" name="isbaron" {% if user_to_edit.isbaron %} checked {% endif %} /> <br>
 		Angezeigt: <input type="checkbox" name="isshown" {% if user_to_edit.isshown %} checked {% endif %} /><br>
