@@ -5,11 +5,12 @@ import database
 # from email.MIMEText import MIMEText
 import user
 import logging
+from settings import *
 
 def send_email(recipient, subject, body):
-    gmail_user = 'bier1baroness'
-    gmail_pwd = 'test11test11'
-    FROM = 'bier1baroness@gmail.com'
+    gmail_user = settings.mailUsername
+    gmail_pwd = settings.mailPassword
+    FROM = settings.mailFromName
     SUBJECT = subject
     TEXT = body
 
@@ -32,8 +33,6 @@ def send_email(recipient, subject, body):
         logging.error("Failed to send mail to %s" %recipient)
 
 def send_emails(body, subject, users):
-    FROM = 'bier1baroness@gmail.com'
-
     for user in users:
         debt = database.get_debt(user.name)
         subject_parsed = parse_email(subject, user, debt)
@@ -41,7 +40,6 @@ def send_emails(body, subject, users):
         send_email(user.email, subject_parsed, body_parsed)
 
 def parse_email(text, u, dept):
-
     text = text.replace('%%longname%%', u.longname)
     text = text.replace('%%dept%%', str(dept))
 

@@ -41,7 +41,14 @@ class Settings:
         self.autoAnnoy = False      #Automatically send payment eMails
         self.annoyDays = 20         #Automatically send mails every x days (default 20)
         self.annoyLimit = 100       #Money limit for autoAnnoy (default 100)
-        #Mail Messages
+
+        ##Email
+        #Login data and server
+        self.SMTPserver = "smtp.gmail.com:587"        #Mailserver URL
+        self.mailUsername = "bier1baroness"           #Username for the mailserver
+        self.mailPassword = "test11test11"            #Password for the User on the mailserver
+        self.mailFromName = "bier1baroness@gmail.com" #From filed in mail header
+        #Standard Texts
         self.singleMessageStandardSubject = u"Baroness - Bierrechnung"
         self.singleMessageStandardText = u"Hallo %%longname%%\ndu hast %%dept%%€ Schulden.\nBitte überweise diesen Betrag an das Konto:\n\n%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%end_if_is_black%%\nLiebe Grüße,\nDein Bierbaron"
         self.masMessageStandardSubject = u"Baroness - Bierrechnung"
