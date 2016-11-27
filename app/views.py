@@ -8,10 +8,11 @@ from plot import *
 from user import User
 from fridge import Fridge, Sensor
 from product import Product
-from send_email import send_email, send_emails
+from send_email import send_email, send_emails, parse_email
 from consumption import Consumption
 import bcrypt
 import os
+from settings import *
 
 
 @app.route('/static/<path:path>')
@@ -323,7 +324,9 @@ def send_personal_bill(name=None):
         return render_template('billing.html', users=users, success=success, debt=debt,  user=get_user_by_name(session.get('name')))
 
     if request.method == 'GET':
-        return render_template('billing_personal.html', user_to_bill=get_user_by_name(name), dept=get_debt(name), user=get_user_by_name(session.get('name')))
+        emailtext = parse_email(settings.singleMessageStandardText, get_user_by_name(name), get_debt(name))
+        emailsubject =parse_email(settings.singleMessageStandardSubject, get_user_by_name(name), get_debt(name))
+        return render_template('billing_personal.html', emailtext=emailtext, emailsubject=emailsubject, user=get_user_by_name(session.get('name')), user_to_bill=get_user_by_name(name))
 
 
 @app.route('/billing/send_all_bills', methods=['GET', 'POST'])
@@ -341,11 +344,11 @@ def send_mass_mail(name=None):
         #    subject_parsed = parse_email(subject, user, 3) # change ammount of depts here!
         #    send_email(user.email, subject_parsed, message_parsed)
 
-        success = "An alle user werden Rechnungen versendet."
+        success = "An alle User werden Rechnungen versendet."
         return render_template('billing.html', users=users, success=success, dept=0, user=get_user_by_name(session.get('name')))
 
     if request.method == 'GET':
-        return render_template('billing_mass_mail.html', user=get_user_by_name(session.get('name')))
+        return render_template('billing_mass_mail.html', user=get_user_by_name(session.get('name')), emailtext=settings.masMessageStandardText, emailsubject=settings.masMessageStandardSubject)
 
 
 @app.route('/selfmanagement', methods=['GET', 'POST'])

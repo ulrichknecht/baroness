@@ -41,6 +41,11 @@ class Settings:
         self.autoAnnoy = False      #Automatically send payment eMails
         self.annoyDays = 20         #Automatically send mails every x days (default 20)
         self.annoyLimit = 100       #Money limit for autoAnnoy (default 100)
+        #Mail Messages
+        self.singleMessageStandardSubject = u"Baroness - Bierrechnung"
+        self.singleMessageStandardText = u"Hallo %%longname%%\ndu hast %%dept%%€ Schulden.\nBitte überweise diesen Betrag an das Konto:\n\n%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%end_if_is_black%%\nLiebe Grüße,\nDein Bierbaron"
+        self.masMessageStandardSubject = u"Baroness - Bierrechnung"
+        self.masMessageStandardText = u"Hallo %%longname%%\ndu hast %%dept%%€ Schulden.\nBitte überweise diesen Betrag an das Konto:\n\n%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%end_if_is_black%%\nLiebe Grüße,\nDein Bierbaron"
 
         ##Data Logging
         #Fridge Temperature

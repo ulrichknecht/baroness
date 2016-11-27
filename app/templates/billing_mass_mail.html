@@ -12,15 +12,11 @@
 	{% endif %}
 	<h1>Rechnung an alle verschicken</h1>
 	<form name="billing" method="post" action="/billing/send_all_bills">
-		Betreff:<input type="text" name="subject" value="Bierrechnung von der Baroness"/> <br />
+		Betreff:<input type="text" name="subject" value="{{emailsubject}}"/> <br />
         <textarea cols="80" rows="20" name="message">
-Hallo %%longname%%
-du hast %%dept%%€ Schulden.
-Bitte überweise diesen Betrag an das Konto:
-
-%%if_is_black%%Weil du zu hohe Schulden hast, bist du geschwärzt%%end_if_is_black%%
+{{emailtext}}
 </textarea><br />
-		<p> Warnung: Das versenden vieler emails dauert ein weilchen.</p>
+		<p> Warnung: Das versenden vieler emails dauert ein weilchen. (kann länger als eine Minute sein)</p>
 		<input type="submit" value="Email versenden">
 	</form>
 
