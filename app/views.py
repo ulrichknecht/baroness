@@ -13,7 +13,12 @@ from consumption import Consumption
 import bcrypt
 import os
 from settings import *
+import time
 
+# makes the variable timehex available in all templates
+@app.context_processor
+def inject_time():
+    return dict(timestamp=time.time().__int__())
 
 @app.route('/static/<path:path>')
 def static_proxy(path):

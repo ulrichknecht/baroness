@@ -15,7 +15,7 @@
                 <div class="fridge_sensor">
                     {{ sensor.name }}<br>
                     {% set fils = "log_%s.png" % sensor.id %}
-                    <img src="{{ url_for('static', filename=fils) }}" /><br>
+                    <img src="{{ url_for('static', filename=fils) }}?{{timestamp}}" /><br>
                 </div>
                 {% endfor %}
             </div>

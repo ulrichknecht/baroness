@@ -18,7 +18,7 @@
 							<div class="center">
 								<h2>{{product.name}}</h2>
 								{% set fils = "product_%s.png" % product.name %}
-								<img src="{{ url_for('static', filename=fils) }}" /><br>
+								<img src="{{ url_for('static', filename=fils) }}?{{timestamp}}" /><br>
 							</div>
 							<div class="right">
 							{{"%0.2f" % product.price}} €

@@ -2,7 +2,7 @@
 {% set title = "Bierliste" %}
 {% block content %}
 	<h1> Bierliste </h1>
-	<img src="{{ url_for('static', filename='bierliste_small.png') }}" style="width:100%;max-width:990px;">
+	<img src="{{ url_for('static', filename='bierliste_small.png') }}?{{timestamp}}" style="width:100%;max-width:990px;">
 	<!-- <table>
   		<tr>
     		<th>ID</th>
