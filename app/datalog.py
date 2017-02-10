@@ -72,13 +72,12 @@ class DataLogger:
                 (count, data) = self.ioif.bb_i2c_zip(P_SDA, [I2C_SET_ADDR, i, I2C_START, I2C_READ, SENSOR_DATALEN, I2C_STOP, I2C_END])
                 columns.append(str(i))
                 if count > 1:
-		    sign = 1
-                    if data[0] > 128:
-                        print "sign"
-                        data[0] = data[0]-128
-                        sign = -1
-                    data_fast[i-SENSOR_BASEID] += sign * (int(data[0]) + (int(data[1]) / 256.0))
-                    data_perm[i-SENSOR_BASEID] += sign * (int(data[0]) + (int(data[1]) / 256.0))
+                    read = ((data[0] << 8) & 0xFF00) + (data[1])
+                    read = read / 256.0
+                    if read > 127:
+                        read -= 256
+                    data_fast[i-SENSOR_BASEID] += read
+                    data_perm[i-SENSOR_BASEID] += read 
                 else:
                     data_fast[i-SENSOR_BASEID] = np.nan
                     data_perm[i-SENSOR_BASEID] = np.nan
