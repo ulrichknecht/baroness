@@ -3,11 +3,11 @@
 {% block content %}
 	<h1> Konsumieren </h1>
 	{% if message %}
-		<div class="loggedin"> {{ message }} </div>
+		<div class="somethinggood"> {{ message }} </div>
 	{% endif %}
 	<div>
 		{% if user.isblack %}
-			Sorry, du bist geschwärzt!
+			<div class="somethingbad">Sorry, du bist geschwärzt!</div>
 		{% else %}
 			<h2>Möchtest du etwas konsumieren?</h2>
 			{% for product in products %}

@@ -3,10 +3,10 @@
 {% block content %}
 	<h1>Konsumat {{product_to_edit.name}} bearbeiten</h1>
 	{% if error %}
-		<p>Fehler: {{ error }}</p>
+		<div class="somethingbad">Fehler: {{ error }}</div>
 	{% else %}
 	{% if success %}
-		<p>{{ success }}</p>
+		<div class="somethinggood">{{ success }}</div>
 	{% endif %}
 	<form name="product" method="post" action="/manage_beverages/edit" enctype="multipart/form-data">
 		ProduktID:<br><input type="text" name="id" required value="{{product_to_edit.id}}" readonly="readonly" /> <br>

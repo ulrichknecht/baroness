@@ -3,7 +3,7 @@
 {% block content %}
 	<h1> Login </h1>
 	{% if error %}
-		<p>{{ error }}</p>
+		<div class="somethingbad">{{ error }}</div>
 	{% endif %}
 	<form name="login" method="post" action="/login">
 		Username:<br><input type="text" name=username required placeholder="Username"><br>

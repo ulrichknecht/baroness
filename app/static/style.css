@@ -24,6 +24,26 @@ div.loggedin { background-color:#009966;
                 border:0px solid black;
 }
 
+/* NOTICE WHEN SOMETHING BAD HAPPENEND */
+div.somethingbad { background-color:#996600;
+                color:white;
+                padding:5px;
+                padding-left:20px;
+                overflow:hidden;
+                border-radius:5px;
+                border:0px solid black;
+}
+
+/* NOTICE WHEN USER IS LOGGED IN */
+div.somethinggood { background-color:#009966;
+                color:white;
+                padding:5px;
+                padding-left:20px;
+                overflow:hidden;
+                border-radius:5px;
+                border:0px solid black;
+}
+
 /* BORDER AND PADDING FOR MAIN CONTENT */
 div.mainblock { background-color:white;
                 color:black;

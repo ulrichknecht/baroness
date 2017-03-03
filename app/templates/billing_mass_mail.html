@@ -1,14 +1,8 @@
 {% extends "base.html"%}
 {% set title = "An alle User Rechnungen versenden" %}
 {% block content %}
-	<h3>TODO: </h3>
-	<ul>
-		<li>actual send emails</li>
-        <li>save default text somewhere and make it configureable</li>
-		<li>insert the right ammount of dept</li>
-	</ul>
 	{% if success %}
-		<p>{{ success }}</p>
+		<div class="somethinggood">{{ success }}</div>
 	{% endif %}
 	<h1>Rechnung an alle verschicken</h1>
 	<form name="billing" method="post" action="/billing/send_all_bills">

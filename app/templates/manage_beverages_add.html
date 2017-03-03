@@ -3,12 +3,11 @@
 {% block content %}
 	<h1>Konsumat hinzufügen</h1>
 	{% if error %}
-		<p>Fehler: {{ error }}</p>
+		<div class="somethingbad">Fehler: {{ error }}</div>
 	{% endif %}
 	{% if success %}
-		<p>{{ success }}</p>
+		<div class="somethinggood">{{ success }}</div>
 	{% endif %}
-	<p> TODO: many </p>
 	<form name="user" method="post" action="/manage_beverages/add" enctype="multipart/form-data">
 		Produktname:<br><input type="text" name="name" required><br>
 		Preis:<br><input type="number" name="price" step="any" required value="0.0" /> € <br>

@@ -2,7 +2,7 @@
 {% set title = "Persönliche Rechnung versenden" %}
 {% block content %}
 	{% if success %}
-		<p>{{ success }}</p>
+		<div class="somethinggood">{{ success }}</div>
 	{% endif %}
 	<h1>Rechnung an {{user_to_bill.longname}} verschicken</h1>
 	<form name="billing" method="post" action="/billing/send_personal_bill/{{user_to_bill.name}}">
