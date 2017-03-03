@@ -179,30 +179,33 @@ class PanelDrinks (wx.Panel):
         for product in products:
             if product.isshown:
                 #480x320
-                self.but = wx.Button(self, id=wx.ID_ANY, label=product.name + u"\n" + u"%0.2f" % product.price, pos=(0+i*120, 0), size=(120, 120))
-                self.but.SetBackgroundColour((255-(i*20 % 40), (160+(i*50 % 100)), 0))
+                self.but = wx.Button(self, id=wx.ID_ANY, label=product.name + u"\n" + u"%0.2f" % product.price, pos=((i%4)*120, int(i/4)*120), size=(120, 120))
+                self.but.SetBackgroundColour((255-((i+int(i/4))*20 % 40), (160+((i+int(i/4))*50 % 100)), 0))
                 #self.but.SetForegroundColour("#006699")
                 self.but.SetFont(wx.Font(23, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
                 self.but.Bind(wx.EVT_LEFT_DOWN, parent.onProduct, id=self.but.Id)
                 i += 1
 
         if not settings.onlyOneDrink:
-            self.b_less = wx.Button(self, id = wx.ID_ANY, label=u"-", pos=(0,240), size=(120, 80))
+            self.b_less = wx.Button(self, id = wx.ID_ANY, label=u"-", pos=(0,250), size=(120, 70))
             self.b_less.SetFont(wx.Font(60, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
             self.b_less.Bind(wx.EVT_LEFT_DOWN, self.onLess, id=self.b_less.Id)
 
             self.l_amount = wx.StaticText(self, wx.ID_ANY, "%2d" % 0, pos=(137, 245), style=wx.ALIGN_CENTER)
             self.l_amount.SetFont(wx.Font(50, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Sans"))
 
-            self.b_more = wx.Button(self, id = wx.ID_ANY, label=u"+", pos=(240,240), size=(120, 80))
+            self.b_more = wx.Button(self, id = wx.ID_ANY, label=u"+", pos=(240,250), size=(120, 70))
             self.b_more.SetFont(wx.Font(60, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
             self.b_more.Bind(wx.EVT_LEFT_DOWN, self.onMore, id=self.b_more.Id)
 
-        self.b_exit = wx.Button(self, id = wx.ID_ANY, label=u"x", pos=(360,240), size=(120, 80))
+        self.b_exit = wx.Button(self, id = wx.ID_ANY, label=u"x", pos=(360,250), size=(120, 70))
         self.b_exit.SetFont(wx.Font(30, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.b_exit.Bind(wx.EVT_LEFT_DOWN, parent.onExit, id=self.b_exit.Id)
 
-        self.l_user = wx.StaticText(self, wx.ID_ANY, "todo", pos=(20,170), style=wx.ALIGN_CENTER)
+        if i <= 4:
+            self.l_user = wx.StaticText(self, wx.ID_ANY, "todo", pos=(20,170), style=wx.ALIGN_CENTER)
+        else:
+            self.l_user = wx.StaticText(self, wx.ID_ANY, "todo", pos=((i%4)*120+20,170), style=wx.ALIGN_CENTER)
         self.l_user.SetFont(wx.Font(25, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
 
     def onMore(self,e, id=-1):
