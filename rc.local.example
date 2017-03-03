@@ -1,0 +1,18 @@
+sleep 1
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/lib
+
+sleep 2
+
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 5000
+echo "iptables nat started"
+
+sleep 2
+sudo pigpiod
+echo "pigpiod started"
+
+sleep 2
+cd /home/pi/baroness && sudo ./restart.sh' & 
+echo "baroness started"
+
+exit 0
+

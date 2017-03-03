@@ -7,7 +7,7 @@ except:
 import signal
 import thread
 import time
-
+#from multiprocessing import Process 
 
 class RFID:
 
@@ -17,7 +17,12 @@ class RFID:
         signal.signal(signal.SIGINT, self.stop)
         self.callback = callbackf
         self.loop = True
-        thread.start_new_thread(self.read, ())
+        if 1:
+            thread.start_new_thread(self.read, ())
+	else:
+            p = Process(target=self.read, args=())
+	    p.start()
+	    p.join()
 
     def read(self):
         while True:
