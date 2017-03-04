@@ -364,20 +364,21 @@ def selfmanagement():
         if not bcrypt.checkpw(request.form['password_old'], u.password):
             success = "Passwort falsch!"
         else:
-            if ('password1' in request.form) & ('password2' in request.form):
-                if request.form['password1'] == request.form['password2']:
-                    u.password = bcrypt.hashpw(request.form['password1'], bcrypt.gensalt())
+            if len(request.form['password1']) > 0:
+                if ('password1' in request.form) & ('password2' in request.form):
+                    if (request.form['password1'] == request.form['password2']):
+                        u.password = bcrypt.hashpw(request.form['password1'], bcrypt.gensalt())
 
-                    u.rfid_id = request.form['rfid_id']
+                        u.rfid_id = request.form['rfid_id']
 
-                    if 'onlyrfid' in request.form:
-                        u.onlyrfid = True
+                        if 'onlyrfid' in request.form:
+                            u.onlyrfid = True
+                        else:
+                            u.onlyrfid = False
+                        update_user(u)
+                        success = u'Einstellungen wurden übernommen!'
                     else:
-                        u.onlyrfid = False
-                    update_user(u)
-                    success = u'Einstellungen wurden übernommen!'
-                else:
-                    success = u'Neue Passwörter stimmen nicht überein!'
+                        success = u'Neue Passwörter stimmen nicht überein!'
             else:
                 u.rfid_id = request.form['rfid_id']
 
