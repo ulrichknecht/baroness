@@ -134,6 +134,12 @@ def manage_users_edit(name=None):
         u.email = request.form['email']
         u.rfid_id = request.form['rfid_id']
 
+        if len(request.form['new_password']) > 0:
+            u.password = bcrypt.hashpw(request.form['new_password'], bcrypt.gensalt())
+        else:
+            u2 = get_user_by_id(u.id)
+            u.password = u2.password
+
         if 'isblack' in request.form:
             u.isblack = True
         else:
@@ -158,9 +164,6 @@ def manage_users_edit(name=None):
             u.onlyrfid = True
         else:
             u.onlyrfid = False
-
-        u2 = get_user_by_id(u.id)
-        u.password = u2.password
 
         update_user(u)
 
