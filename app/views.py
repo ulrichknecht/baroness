@@ -283,7 +283,7 @@ def personal():
     for deposit in deposits:
         deposited += deposit.amount
 
-    return render_template('personal.html', user=user, consumed=consumed,
+    return render_template('personal.html', user=user, consumed=reversed(consumed),
                            products=get_products(), deposits=deposits, deposited=deposited, owed=owed)
 
 @app.route('/billing', methods=['POST', 'GET'])
