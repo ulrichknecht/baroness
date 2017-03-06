@@ -149,7 +149,8 @@ def set_rfid_to_userid(rfid_ids, user_id):
         if not u: #rfid id is not assigned to a user, so it should be added
              add_rfid_id(rfid_id, user_id)
 
-    for old_rfid in get_rfid_ids_by_userid(user_id):
+    old_rfids = get_rfid_ids_by_userid(user_id).replace(" ","").split(";")
+    for old_rfid in old_rfids:
         if old_rfid not in new_rfids:
             query_db("DELETE FROM Rfid WHERE rfid_id = ?", (old_rfid, ))
 

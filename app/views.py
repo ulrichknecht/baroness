@@ -134,6 +134,12 @@ def manage_users_edit(name=None):
         u.email = request.form['email']
         u.rfid_id = request.form['rfid_id']
 
+        if len(request.form['new_password']) > 0:
+            u.password = bcrypt.hashpw(request.form['new_password'], bcrypt.gensalt())
+        else:
+            u2 = get_user_by_id(u.id)
+            u.password = u2.password
+
         if 'isblack' in request.form:
             u.isblack = True
         else:
@@ -158,9 +164,6 @@ def manage_users_edit(name=None):
             u.onlyrfid = True
         else:
             u.onlyrfid = False
-
-        u2 = get_user_by_id(u.id)
-        u.password = u2.password
 
         update_user(u)
 
@@ -280,7 +283,7 @@ def personal():
     for deposit in deposits:
         deposited += deposit.amount
 
-    return render_template('personal.html', user=user, consumed=consumed,
+    return render_template('personal.html', user=user, consumed=reversed(consumed),
                            products=get_products(), deposits=deposits, deposited=deposited, owed=owed)
 
 @app.route('/billing', methods=['POST', 'GET'])
@@ -302,7 +305,7 @@ def billing():
         for user in users:
             debt[user.id-1] = get_debt(user.name)
 
-        return render_template('billing.html', users=users, success="Writing to database is not implemented", debt=debt, user=get_user_by_name(session.get('name')))
+        return render_template('billing.html', users=users, success=u"Einzahlungen übernommen", debt=debt, user=get_user_by_name(session.get('name')))
     if request.method == 'GET':
         debt = [0 for user in users]
         for user in users:
@@ -364,20 +367,21 @@ def selfmanagement():
         if not bcrypt.checkpw(request.form['password_old'], u.password):
             success = "Passwort falsch!"
         else:
-            if ('password1' in request.form) & ('password2' in request.form):
-                if request.form['password1'] == request.form['password2']:
-                    u.password = bcrypt.hashpw(request.form['password1'], bcrypt.gensalt())
+            if len(request.form['password1']) > 0:
+                if ('password1' in request.form) & ('password2' in request.form):
+                    if (request.form['password1'] == request.form['password2']):
+                        u.password = bcrypt.hashpw(request.form['password1'], bcrypt.gensalt())
 
-                    u.rfid_id = request.form['rfid_id']
+                        u.rfid_id = request.form['rfid_id']
 
-                    if 'onlyrfid' in request.form:
-                        u.onlyrfid = True
+                        if 'onlyrfid' in request.form:
+                            u.onlyrfid = True
+                        else:
+                            u.onlyrfid = False
+                        update_user(u)
+                        success = u'Einstellungen wurden übernommen!'
                     else:
-                        u.onlyrfid = False
-                    update_user(u)
-                    success = u'Einstellungen wurden übernommen!'
-                else:
-                    success = u'Neue Passwörter stimmen nicht überein!'
+                        success = u'Neue Passwörter stimmen nicht überein!'
             else:
                 u.rfid_id = request.form['rfid_id']
 
