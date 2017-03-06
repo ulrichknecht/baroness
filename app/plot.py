@@ -32,7 +32,7 @@ class Plotter:
             logfiles = list()
             logfiles += glob.glob("app/static/logdata*.csv")
             logfiles.append("/tmp/baroness_logdata_fast.csv")
-            print logfiles
+            #print logfiles
             if logfiles:
                 plot_log(logfiles, hours = 4)
 

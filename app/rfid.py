@@ -4,7 +4,7 @@ try:
 except:
     logging.critical("Need MFRC522 Library to read RFID tags, disable RFID if no reader is present!")
     exit()
-import signal
+#import signal
 import thread
 import time
 #from multiprocessing import Process 
@@ -14,7 +14,7 @@ class RFID:
     def __init__(self, callbackf):
         logging.info("RFID Reader initialized!")
         self.reader = MFRC522.MFRC522(spd=500000)
-        signal.signal(signal.SIGINT, self.stop)
+        #signal.signal(signal.SIGINT, self.stop)
         self.callback = callbackf
         self.loop = True
         if 1:

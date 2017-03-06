@@ -9,12 +9,17 @@ from app import settings
 from app import datalog
 from app import plot
 
+def rungui():
+    wxx = wx.App()
+    gui.MainWindow(None)
+    wxx.MainLoop()
+
 if __name__ == '__main__':
 
     #logging!
     logfile = "baroness.log"
-    #logging.basicConfig(filename=logfile, level=logging.WARNING)
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(filename=logfile, level=logging.WARNING)
+    #logging.basicConfig(level=logging.DEBUG)
     logging.info("Baroness started!")
     print "Baroness started: logging to ", logfile
 
@@ -26,9 +31,10 @@ if __name__ == '__main__':
     plotter = plot.Plotter()
 
     #start gui
-    wx = wx.App()
-    gui.MainWindow(None)
-    thread.start_new_thread(wx.MainLoop,())
+    #wx = wx.App()
+    #gui.MainWindow(None)
+    #thread.start_new_thread(wx.MainLoop,())
+    thread.start_new_thread(rungui,())
 
     # start flask
     app.secret_key = urandom(24)
