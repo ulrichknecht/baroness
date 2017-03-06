@@ -52,6 +52,8 @@ class MainWindow(wx.Frame):
 
     def onUser(self, e):
         longn = e.GetEventObject().GetLabelText()
+        if not longn:
+            return
         for user in get_users():
             if user.longname == longn:
                 self.user = user
@@ -223,25 +225,27 @@ class PanelDrinks (wx.Panel):
     def GetAmount(self):
         return int(self.l_amount.GetLabelText())
 
-
 class PanelUsers (wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=(0, 0), size=(480, 320))
-
+        self.parent = parent
         self.bitmap_1 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap("./gui/users.png", wx.BITMAP_TYPE_ANY), pos=(0, 0))
 
         users = get_users()
-        names = list()
+        self.names = list()
         for user in users:
             if user.isshown and not user.onlyrfid:
-                names.append(user.longname)
+                self.names.append(user.longname)
 
         self.but_names = list()
-        i = 0
-        for name in names:
+	self.position = 0
+	self.lines = 4
+	self.items = len(self.names) 
+
+	for i in range(self.lines):
             #480x320
-            self.but = wx.lib.platebtn.PlateButton(self, label=name, pos=(3, 3+i*80),
+            self.but = wx.lib.platebtn.PlateButton(self, label=self.names[self.position+i] if self.position+i < len(self.names) else "", pos=(3, 3+i*80),
                                                    style=wx.BU_EXACTFIT | wx.lib.platebtn.PB_STYLE_SQUARE)
             self.but.SetSize((392, 74))
 
@@ -251,7 +255,6 @@ class PanelUsers (wx.Panel):
             self.but.SetFont(wx.Font(25, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
             self.but.Bind(wx.EVT_LEFT_DOWN, parent.onUser, id=self.but.Id)
             self.but_names.append(self.but)
-            i += 1
 
         self.b_up = wx.Button(self, id=wx.ID_ANY, label=u"\u25B2", pos=(400, 0), size=(80, 80))
         self.b_up.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
@@ -264,18 +267,22 @@ class PanelUsers (wx.Panel):
         self.b_exit = wx.Button(self, id=wx.ID_ANY, label="X", pos=(400, 120), size=(80, 80))
         self.b_exit.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.b_exit.Bind(wx.EVT_LEFT_DOWN, parent.onExit, id=self.b_exit.Id)
-
-    #This is bad programming :)
-    def on_down(self,e , id=-1):
-        if self.but_names[len(self.but_names)-1].GetPosition()[1] < 320:
-            return
-        for button in self.but_names:
-            button.SetPosition((button.GetPosition()[0], button.GetPosition()[1]-320))
         self.Layout()
+
+    def on_down(self,e , id=-1):
+        if self.position+self.lines >= self.items:
+            return
+        self.position += self.lines
+        for i, button in enumerate(self.but_names):
+            button.SetLabel(self.names[self.position+i] if self.position+i < self.items else "")
+            button.Hide()
+            button.Show()
 
     def on_up(self,e , id=-1):
-        if self.but_names[0].GetPosition()[1] >= 0:
+        if self.position-self.lines < 0:
             return
-        for button in self.but_names:
-            button.SetPosition((button.GetPosition()[0], button.GetPosition()[1]+320))
-        self.Layout()
+        self.position -= self.lines
+        for i, button in enumerate(self.but_names):
+            button.SetLabel(self.names[self.position+i] if self.position+i < self.items else "")
+            button.Hide()
+            button.Show()
