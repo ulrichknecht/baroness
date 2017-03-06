@@ -305,7 +305,7 @@ def billing():
         for user in users:
             debt[user.id-1] = get_debt(user.name)
 
-        return render_template('billing.html', users=users, success="Writing to database is not implemented", debt=debt, user=get_user_by_name(session.get('name')))
+        return render_template('billing.html', users=users, success=u"Einzahlungen übernommen", debt=debt, user=get_user_by_name(session.get('name')))
     if request.method == 'GET':
         debt = [0 for user in users]
         for user in users:
