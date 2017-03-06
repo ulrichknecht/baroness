@@ -247,7 +247,7 @@ class PanelUsers (wx.Panel):
             #480x320
             self.but = wx.lib.platebtn.PlateButton(self, label=self.names[self.position+i] if self.position+i < len(self.names) else "", pos=(3, 3+i*80),
                                                    style=wx.BU_EXACTFIT | wx.lib.platebtn.PB_STYLE_SQUARE)
-            self.but.SetSize((392, 74))
+            self.but.SetSize((365, 74))
 
             self.but.SetBackgroundColour((255-(i*20 % 40), (160+(i*50 % 100)), 0))
             #self.but.SetForegroundColour("#006699")
@@ -256,15 +256,15 @@ class PanelUsers (wx.Panel):
             self.but.Bind(wx.EVT_LEFT_DOWN, parent.onUser, id=self.but.Id)
             self.but_names.append(self.but)
 
-        self.b_up = wx.Button(self, id=wx.ID_ANY, label=u"\u25B2", pos=(400, 0), size=(80, 80))
+        self.b_up = wx.Button(self, id=wx.ID_ANY, label=u"\u25B2", pos=(374, 0), size=(106, 106))
         self.b_up.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.b_up.Bind(wx.EVT_LEFT_DOWN, self.on_up, id=self.b_up.Id)
 
-        self.b_down = wx.Button(self, id=wx.ID_ANY, label=u"\u25BC", pos=(400, 240), size=(80, 80))
+        self.b_down = wx.Button(self, id=wx.ID_ANY, label=u"\u25BC", pos=(374, 214), size=(106, 106))
         self.b_down.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.b_down.Bind(wx.EVT_LEFT_DOWN, self.on_down, id=self.b_down.Id)
 
-        self.b_exit = wx.Button(self, id=wx.ID_ANY, label="X", pos=(400, 120), size=(80, 80))
+        self.b_exit = wx.Button(self, id=wx.ID_ANY, label="X", pos=(374, 107), size=(106, 106))
         self.b_exit.SetFont(wx.Font(20, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Humor Sans"))
         self.b_exit.Bind(wx.EVT_LEFT_DOWN, parent.onExit, id=self.b_exit.Id)
         self.Layout()
