@@ -11,8 +11,8 @@ sudo pigpiod
 echo "pigpiod started"
 
 sleep 2
-cd /home/pi/baroness && sudo ./restart.sh' & 
+cd /home/pi/baroness && sudo ./restart.sh &
 echo "baroness started"
 
+#sleep 2
 exit 0
-
