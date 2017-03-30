@@ -65,7 +65,7 @@ class DataLogger:
         n_fast = 1
         n_perm = 1
         while logging:
-            logging.info("Data Logger logging")
+            logging.debug("Data Logger logging")
             columns = list(("time", ))
 
             for i in range(SENSOR_BASEID, SENSOR_BASEID + 8):

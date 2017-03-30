@@ -69,11 +69,11 @@ def plot_all(user=None):
         plot_total(user)
     plot_total()
     plot_list(4)
-    logging.info('plot_all')
+    logging.info('Plotter: plot_all')
 
 
 def plot_total(user=None):
-    logging.info("start plot_total")
+    logging.debug("start plot_total")
 
     today = datetime.date.today()
     delta = datetime.timedelta(days=1)
@@ -138,11 +138,11 @@ def plot_total(user=None):
         fils = "app/static/total%03d.png" % user.id
         fill = "app/static/total%03d_big.png" % user.id
     plt.title(tit)
-    logging.info("Plot plot_total " + str(datetime.datetime.now()))
+    logging.debug("Plot plot_total " + str(datetime.datetime.now()))
     #480x320
     fig.set_size_inches(4.8, 3.2)
     plt.savefig(fils, dpi=100)
-    logging.info("Plot: End plot_total " + str(datetime.datetime.now()))
+    logging.debug("Plot: End plot_total " + str(datetime.datetime.now()))
     #fig.set_size_inches(4.8, 3.2)
     #plt.savefig(fill, dpi=400)
 
@@ -201,18 +201,18 @@ def plot_log(logfiles, hours):
             ax.xaxis.set_major_formatter(AutoDateFormatter(defaultfmt='%d.%m'))
             #f.autofmt_xdate()
         except:
-            logging.warning("Plot: Few data!")
+            logging.debug("Plot: Few data!")
         #plt.xlabel('Datum')
         #plt.ylabel('Temperatur / C')
         outfile = "app/static/log_" + str(item) + ".png"
-        logging.info("Plot plot_log " + str(datetime.datetime.now()))
+        logging.debug("Plot plot_log " + str(datetime.datetime.now()))
         #480x320
         plt.gcf().set_size_inches(5.3, 2.4)
         plt.tight_layout()
         plt.savefig(outfile, dpi=70, transparent=True, bbox_inches='tight')
         plt.close()
 
-    logging.info("Plot: End plot_log " + str(datetime.datetime.now()))
+    logging.debug("Plot: End plot_log " + str(datetime.datetime.now()))
 
 
 def plot_list(duration):
@@ -292,11 +292,11 @@ def plot_list(duration):
 
     plt.title("Bierliste ("+ str(duration) + " Wochen)")
 
-    logging.info("Plot plot_list " + str(datetime.datetime.now()))
+    logging.debug("Plot plot_list " + str(datetime.datetime.now()))
     #800x600
     fig.set_size_inches(15, 10)
     plt.savefig('app/static/bierliste_small.png', dpi=72, bbox_inches='tight')
     #1024x768
     #fig.set_size_inches(10.24, 7.68)
     #plt.savefig('app/static/bierliste.png', dpi=100)
-    logging.info("Plot: End plot_list " + str(datetime.datetime.now()))
+    logging.debug("Plot: End plot_list " + str(datetime.datetime.now()))

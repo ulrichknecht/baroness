@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     #logging!
     logfile = "baroness.log"
-    logging.basicConfig(filename=logfile, level=logging.WARNING)
+    logging.basicConfig(filename=logfile, level=logging.INFO, format='%(asctime)s - %(name)s - %(message)s')
     #logging.basicConfig(level=logging.DEBUG)
     logging.info("Baroness started!")
     print "Baroness started: logging to ", logfile
